@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    public String getProductInfo() {
-        return "Apple BY CLOUD SERVICE";
+    public String getProductInfo(Integer id) {
+        return "id:" + id + ",product-name:Apple";
     }
 }

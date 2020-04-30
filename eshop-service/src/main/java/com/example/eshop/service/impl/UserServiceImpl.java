@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    public String getUserInfo() {
-        return "Kenny BY LOCAL SERVICE";
+    public String getUserInfo(Integer id) {
+        return "id:" + id + ",username:Kenny";
     }
 }
