@@ -1,8 +1,10 @@
 package com.example.eshop.admin.service.impl;
 
+import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemUser;
 import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.service.LoginService;
+import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.util.CookieUtil;
 import com.example.eshop.admin.util.JsonUtil;
@@ -30,6 +32,9 @@ public class LoginServiceImpl implements LoginService {
     private SystemUserService systemUserService;
 
     @Autowired
+    private SystemGroupService systemGroupService;
+
+    @Autowired
     private TokenInfoDto tokenInfoDto;
 
     @Autowired
@@ -42,10 +47,13 @@ public class LoginServiceImpl implements LoginService {
             return false;
         }
 
+        SystemGroup systemGroup = systemGroupService.findById(systemUser.getGroupId());
+
         Map<String, Object> map = new HashMap<>();
         map.put("systemUserId", systemUser.getId());
         map.put("systemUsername", systemUser.getUsername());
         map.put("systemGroupId", systemUser.getGroupId());
+        map.put("systemGroupName", systemGroup.getName());
         map.put("systemRealname", systemUser.getRealname());
         map.put("time", new Date().getTime());
         map.put("key", KEY);
@@ -60,6 +68,7 @@ public class LoginServiceImpl implements LoginService {
         tokenInfoDto.setSystemUserId(systemUser.getId());
         tokenInfoDto.setSystemUsername(systemUser.getUsername());
         tokenInfoDto.setSystemGroupId(systemUser.getGroupId());
+        tokenInfoDto.setSystemGroupName(systemGroup.getName());
         tokenInfoDto.setSystemRealname(systemUser.getRealname());
 
         stringRedisTemplate.opsForValue().set(token, JsonUtil.toJson(tokenInfoDto), EXPIRED, TimeUnit.SECONDS);

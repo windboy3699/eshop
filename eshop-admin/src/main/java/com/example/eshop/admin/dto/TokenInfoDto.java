@@ -7,6 +7,7 @@ public class TokenInfoDto {
     private Integer systemUserId;
     private String systemUsername;
     private Integer systemGroupId;
+    private String systemGroupName;
     private String systemRealname;
 
     public Integer getSystemUserId() {
@@ -32,6 +33,10 @@ public class TokenInfoDto {
     public void setSystemGroupId(Integer systemGroupId) {
         this.systemGroupId = systemGroupId;
     }
+
+    public String getSystemGroupName() { return systemGroupName; }
+
+    public void setSystemGroupName(String systemGroupName) { this.systemGroupName = systemGroupName; }
 
     public String getSystemRealname() {
         return systemRealname;

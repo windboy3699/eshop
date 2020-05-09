@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class IndexController {
+public class IndexController extends BaseController{
     @Autowired
     private LoginService loginService;
 
@@ -19,10 +19,13 @@ public class IndexController {
         if (tokenInfoDto == null) {
             return "redirect:/admin/login";
         }
+
         model.addAttribute("systemUserId", tokenInfoDto.getSystemUserId());
         model.addAttribute("systemUsername", tokenInfoDto.getSystemUsername());
         model.addAttribute("systemGroupId", tokenInfoDto.getSystemGroupId());
+        model.addAttribute("systemGroupName", tokenInfoDto.getSystemGroupName());
         model.addAttribute("systemRealname", tokenInfoDto.getSystemRealname());
+        model.addAttribute("debugInfo", "ok");
         return "index";
     }
 }
