@@ -35,7 +35,6 @@ public class SystemLeftMenuServiceImpl implements SystemLeftMenuService {
 
         if (groupId != 1) {
             SystemGroup systemGroup = systemGroupService.findById(groupId);
-
             List<String> strIdList = Arrays.asList(systemGroup.getMenus().split(","));
             List<Integer> intIdList = new ArrayList<>();
             for (String strId : strIdList) {
@@ -62,7 +61,7 @@ public class SystemLeftMenuServiceImpl implements SystemLeftMenuService {
         String uri = request.getRequestURI();
 
         List<SystemMenuDto> systemMenuDtoList = new ArrayList<>();
-
+        List<Integer> activeIdList = new ArrayList<>();
         for (SystemMenu item : allMenu) {
             if (groupId == 1 || menuIdList.contains(item.getId())) {
                 SystemMenuDto systemMenuDto = new SystemMenuDto();
@@ -72,8 +71,22 @@ public class SystemLeftMenuServiceImpl implements SystemLeftMenuService {
                 systemMenuDto.setLink(item.getLink());
                 if (item.getPath() != null && item.getPath().length() != 0 && uri.indexOf(item.getPath()) != -1) {
                     systemMenuDto.setActive(true);
+                    activeIdList.add(item.getId());
+                    SystemMenu level2Menu = mappedAllMenu.get(item.getTopid());
+                    if (level2Menu != null) {
+                        activeIdList.add(level2Menu.getId());
+                        SystemMenu level1Menu = mappedAllMenu.get(level2Menu.getTopid());
+                        if (level1Menu != null) {
+                            activeIdList.add(level1Menu.getId());
+                        }
+                    }
                 }
                 systemMenuDtoList.add(systemMenuDto);
+            }
+        }
+        for (SystemMenuDto item : systemMenuDtoList) {
+            if (activeIdList.contains(item.getId())) {
+                item.setActive(true);
             }
         }
 

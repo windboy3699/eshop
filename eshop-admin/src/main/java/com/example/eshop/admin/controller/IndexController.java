@@ -19,13 +19,6 @@ public class IndexController extends BaseController{
         if (tokenInfoDto == null) {
             return "redirect:/admin/login";
         }
-
-        model.addAttribute("systemUserId", tokenInfoDto.getSystemUserId());
-        model.addAttribute("systemUsername", tokenInfoDto.getSystemUsername());
-        model.addAttribute("systemGroupId", tokenInfoDto.getSystemGroupId());
-        model.addAttribute("systemGroupName", tokenInfoDto.getSystemGroupName());
-        model.addAttribute("systemRealname", tokenInfoDto.getSystemRealname());
-        model.addAttribute("debugInfo", "ok");
         return "index";
     }
 }

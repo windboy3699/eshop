@@ -45,7 +45,7 @@
                     <li class="dropdown user user-menu">
                         <a class="dropdown-toggle">
                             <img th:src="${staticBaseUrl}+'/dist/img/user2-160x160.jpg'" class="user-image" alt="User Image">
-                            <span class="hidden-xs" th:text="${systemRealname}+' | '+${systemGroupName}"></span>
+                            <span class="hidden-xs" th:text="${systemInfo.systemRealname}+' | '+${systemInfo.systemGroupName}"></span>
                         </a>
                     </li>
                     <!-- Control Sidebar Toggle Button -->
@@ -57,9 +57,46 @@
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li th:each="menu1:${systemInfo.leftMenu}" class="treeview" th:class="${menu1.active} == true ? 'treeview active' : 'treeview'">
+                    <a th:href="${menu1.link}">
+                        <i class="fa fa-table"></i> <span th:text="${menu1.name}"></span>
+                        <span th:unless="${#lists.isEmpty(menu1.children)}" class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul th:unless="${#lists.isEmpty(menu1.children)}" class="treeview-menu">
+                        <li th:each="menu2:${menu1.children}" th:class="${menu2.active} == true ? 'active' : ''">
+                            <a th:href="${menu2.link} != '' ? ${menu2.link} : 'javascript:void(0);'">
+                                <i class="fa fa-circle-o"></i>
+                                [[${menu2.name}]]
+                                <span th:unless="${#lists.isEmpty(menu2.children)}" class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul th:unless="${#lists.isEmpty(menu2.children)}" class="treeview-menu">
+                                <li th:each="menu3:${menu2.children}" th:class="${menu3.active} == true ? 'active' : ''">
+                                    <a th:href="${menu3.link} != '' ? ${menu3.link} : 'javascript:void(0);'">
+                                        <i class="fa fa-circle-o"></i>
+                                        [[${menu3.name}]]
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" layout:fragment="content">
+    <div class="content-wrapper" layout:fragment="main">
     <!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
