@@ -4,6 +4,6 @@ import com.example.eshop.admin.dto.SystemMenuDto;
 
 import java.util.List;
 
-public interface SystemLeftMenuService {
+public interface SystemPrivMenuService {
     List<SystemMenuDto> get(int groupId);
 }

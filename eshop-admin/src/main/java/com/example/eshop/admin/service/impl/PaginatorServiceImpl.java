@@ -89,7 +89,7 @@ public class PaginatorServiceImpl implements PaginatorService {
         } else {
             String removeItem = null;
             for (String item : queryStringList) {
-                if (item.indexOf(this.pageName+"=") != -1) {
+                if (item.indexOf(pageName+"=") != -1) {
                     removeItem = item;
                     break;
                 }
@@ -137,6 +137,6 @@ public class PaginatorServiceImpl implements PaginatorService {
     }
 
     private String buildUrl(String queryUrl, Integer pageNum) {
-        return queryUrl + this.pageName + "=" + Integer.toString(pageNum);
+        return queryUrl + pageName + "=" + Integer.toString(pageNum);
     }
 }

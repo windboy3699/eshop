@@ -3,7 +3,7 @@ package com.example.eshop.admin.controller;
 import com.example.eshop.admin.dto.SystemMenuDto;
 import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.service.LoginService;
-import com.example.eshop.admin.service.SystemLeftMenuService;
+import com.example.eshop.admin.service.SystemPrivMenuService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,7 +19,7 @@ public class GlobalController {
     private LoginService loginService;
 
     @Autowired
-    private SystemLeftMenuService systemLeftMenuService;
+    private SystemPrivMenuService systemPrivMenuService;
 
     @ModelAttribute(name = "systemInfo")
     public Map<String, Object> leftMenu() throws JsonProcessingException {
@@ -28,8 +28,8 @@ public class GlobalController {
             return null;
         }
         Map<String, Object> map = new HashMap<>();
-        List<SystemMenuDto> leftMenu = systemLeftMenuService.get(tokenInfoDto.getSystemGroupId());
-        map.put("leftMenu", leftMenu);
+        List<SystemMenuDto> privMenu = systemPrivMenuService.get(tokenInfoDto.getSystemGroupId());
+        map.put("leftMenu", privMenu);
         map.put("systemUserId", tokenInfoDto.getSystemUserId());
         map.put("systemUsername", tokenInfoDto.getSystemUsername());
         map.put("systemGroupId", tokenInfoDto.getSystemGroupId());

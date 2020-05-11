@@ -4,7 +4,7 @@ import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemMenu;
 import com.example.eshop.admin.dto.SystemMenuDto;
 import com.example.eshop.admin.service.SystemGroupService;
-import com.example.eshop.admin.service.SystemLeftMenuService;
+import com.example.eshop.admin.service.SystemPrivMenuService;
 import com.example.eshop.admin.service.SystemMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class SystemLeftMenuServiceImpl implements SystemLeftMenuService {
+public class SystemPrivMenuServiceImpl implements SystemPrivMenuService {
     @Autowired
     private SystemMenuService systemMenuService;
 
