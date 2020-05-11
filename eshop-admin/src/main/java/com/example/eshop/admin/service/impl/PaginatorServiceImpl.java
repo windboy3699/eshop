@@ -10,15 +10,9 @@ import java.util.*;
 
 @Service
 public class PaginatorServiceImpl implements PaginatorService {
-    private HttpServletRequest request;
-
-    private Integer total; //条目总数
-    private Integer pageNum; //当前页码
-    private Integer pageTotal; //条目可分总页数
     private Integer pageSize = 10; //每页条目数量
     private Integer pageLength = 5; //显示的页码数量
     private String pageName = "page"; //页码参数名
-    private String queryUrl; //带参数的url
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
@@ -33,36 +27,39 @@ public class PaginatorServiceImpl implements PaginatorService {
     }
 
     public Map<String, Object> paging(Integer total) {
-        this.request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
-        this.total = total;
-        pageTotal = (new Double(Math.ceil(this.total/pageSize))).intValue();
-        handlePageNum();
-        handleQueryUrl();
+        Integer pageNum = getPageNum();
+        Integer pageTotal = (new Double(Math.ceil(total/pageSize))).intValue();
+        String queryUrl = getQueryUrl();
 
         Map<String, Object> map = new HashMap<>();
 
-        map.put("total", this.total);
+        map.put("total", total);
 
-        String firstPageUrl = pageNum == 1 ? "" : buildUrl(1);
+        String firstPageUrl = pageNum == 1 ? "" : buildUrl(queryUrl,1);
         map.put("firstPageUrl", firstPageUrl);
 
-        String lastPageUrl = pageNum == pageTotal ? "" : buildUrl(pageTotal);
-        map.put("lastPageUrl", lastPageUrl);
-
-        String prevPageUrl = pageNum == 1 ? "" : buildUrl(pageNum - 1);
+        String prevPageUrl = pageNum == 1 ? "" : buildUrl(queryUrl,pageNum - 1);
         map.put("prevPageUrl", prevPageUrl);
 
-        String nextPageUrl = pageNum == pageTotal ? "" : buildUrl(pageNum + 1);
+        String nextPageUrl = pageNum == pageTotal ? "" : buildUrl(queryUrl,pageNum + 1);
         map.put("nextPageUrl", nextPageUrl);
 
-        map.put("middlePageUrl", middlePageUrl());
+        String lastPageUrl = pageNum == pageTotal ? "" : buildUrl(queryUrl, pageTotal);
+        map.put("lastPageUrl", lastPageUrl);
+
+        map.put("middlePageUrl", middlePageUrl(pageNum, pageTotal, queryUrl));
 
         return map;
     }
 
-    private void handlePageNum() {
+    /**
+     * 获取当前是第几页
+     * @return
+     */
+    private Integer getPageNum() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String paramPageNum = request.getParameter(pageName);
+        Integer pageNum;
         if (paramPageNum == null || paramPageNum.length() == 0) {
             pageNum = 1;
         } else {
@@ -72,9 +69,11 @@ public class PaginatorServiceImpl implements PaginatorService {
                 pageNum = 1;
             }
         }
+        return pageNum;
     }
 
-    private void handleQueryUrl() {
+    private String getQueryUrl() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         StringBuffer url = request.getRequestURL();
         String queryString = request.getQueryString();
 
@@ -84,7 +83,7 @@ public class PaginatorServiceImpl implements PaginatorService {
             queryStringList = new ArrayList<>(queryStringArray.length);
             Collections.addAll(queryStringList, queryStringArray);
         }
-
+        String queryUrl;
         if (queryStringList == null || queryStringList.isEmpty()) {
             queryUrl = url + "?";
         } else {
@@ -104,9 +103,10 @@ public class PaginatorServiceImpl implements PaginatorService {
                 queryUrl = url + "?" + org.apache.commons.lang.StringUtils.join(queryStringList.toArray(), "&") + '&';
             }
         }
+        return queryUrl;
     }
 
-    private List<Map<String, Object>> middlePageUrl() {
+    private List<Map<String, Object>> middlePageUrl(Integer pageNum, Integer pageTotal, String queryUrl) {
         Integer start,end;
         if (pageTotal <= pageLength) {
             start = 1;
@@ -129,14 +129,14 @@ public class PaginatorServiceImpl implements PaginatorService {
         for (int i = start; i <= end; i++) {
             Map<String, Object> map = new HashMap<>();
             map.put("num", i);
-            map.put("url", buildUrl(i));
+            map.put("url", buildUrl(queryUrl, i));
             map.put("act", pageNum == i ? true : false);
             pageList.add(map);
         }
         return pageList;
     }
 
-    private String buildUrl(Integer pageNum) {
-        return this.queryUrl + this.pageName + "=" + Integer.toString(pageNum);
+    private String buildUrl(String queryUrl, Integer pageNum) {
+        return queryUrl + this.pageName + "=" + Integer.toString(pageNum);
     }
 }
