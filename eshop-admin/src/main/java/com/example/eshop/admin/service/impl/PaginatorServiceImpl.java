@@ -78,9 +78,12 @@ public class PaginatorServiceImpl implements PaginatorService {
         StringBuffer url = request.getRequestURL();
         String queryString = request.getQueryString();
 
-        String[] queryStringArray = queryString.split("&");
-        List<String> queryStringList = new ArrayList<>(queryStringArray.length);
-        Collections.addAll(queryStringList, queryStringArray);
+        List<String> queryStringList = new ArrayList<>();
+        if (queryString != null && queryString.length() != 0) {
+            String[] queryStringArray = queryString.split("&");
+            queryStringList = new ArrayList<>(queryStringArray.length);
+            Collections.addAll(queryStringList, queryStringArray);
+        }
 
         if (queryStringList == null || queryStringList.isEmpty()) {
             queryUrl = url + "?";
