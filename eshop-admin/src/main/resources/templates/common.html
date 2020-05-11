@@ -1,0 +1,7 @@
+    <ul th:fragment="paginator" class="pagination pagination-sm no-margin pull-right">
+        <li th:unless="${#strings.isEmpty(paginator.firstPageUrl)}"><a th:href="${paginator.firstPageUrl}">首页</a></li>
+        <li th:unless="${#strings.isEmpty(paginator.prevPageUrl)}"><a th:href="${paginator.prevPageUrl}">上一页</a></li>
+        <li th:each="item:${paginator.middlePageUrl}" th:class="${item.act} == true ? 'active' : ''"><a th:href="${item.url}" th:text="${item.num}"></a></li>
+        <li th:unless="${#strings.isEmpty(paginator.nextPageUrl)}"><a th:href="${paginator.nextPageUrl}">下一页</a></li>
+        <li th:unless="${#strings.isEmpty(paginator.lastPageUrl)}"><a th:href="${paginator.lastPageUrl}">尾页</a></li>
+    </ul>
