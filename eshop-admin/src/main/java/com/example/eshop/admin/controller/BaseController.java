@@ -11,7 +11,7 @@ public class BaseController {
     private void configureThymeleafStaticVars(ThymeleafViewResolver viewResolver) {
         if(viewResolver != null) {
             Map<String, Object> vars = new HashMap<>();
-            vars.put("staticBaseUrl", "/static");
+            vars.put("staticBaseUrl", "/admin/static");
             viewResolver.setStaticVariables(vars);
         }
     }

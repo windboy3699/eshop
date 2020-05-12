@@ -90,7 +90,7 @@ public class LoginServiceImpl implements LoginService {
             return null;
         }
         String tokenValue = stringRedisTemplate.opsForValue().get(systemToken);
-        if (tokenValue == null) {
+        if (tokenValue == null || tokenValue.length() == 0) {
             return null;
         }
         TokenInfoDto tokenInfoDto = (TokenInfoDto) JsonUtil.toObject(tokenValue, TokenInfoDto.class);
