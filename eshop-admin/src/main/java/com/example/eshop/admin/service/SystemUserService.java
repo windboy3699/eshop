@@ -1,11 +1,11 @@
 package com.example.eshop.admin.service;
 
 import com.example.eshop.admin.domain.SystemUser;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SystemUserService {
-    List<SystemUser> findAll();
+    Page<SystemUser> findAll(Pageable page);
 
     SystemUser findById(int id);
 

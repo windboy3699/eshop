@@ -4,8 +4,9 @@ import com.example.eshop.admin.dao.SystemUserDao;
 import com.example.eshop.admin.domain.SystemUser;
 import com.example.eshop.admin.service.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,8 +14,8 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Autowired
     SystemUserDao systemUserDao;
 
-    public List<SystemUser> findAll() {
-        return systemUserDao.findAll();
+    public Page<SystemUser> findAll(Pageable pageable) {
+        return systemUserDao.findAll(pageable);
     }
 
     public SystemUser findById(int id) {

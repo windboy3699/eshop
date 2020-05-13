@@ -1,65 +1,37 @@
 package com.example.eshop.admin.service.impl;
 
-import com.example.eshop.admin.service.PaginatorService;
-import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@Service
-public class PaginatorServiceImpl implements PaginatorService {
+public class PaginatorServiceImpl {
+    private Integer pageNum = null; //第几页
     private Integer pageSize = 10; //每页条目数量
-    private Integer pageLength = 5; //显示的页码数量
+    private Integer pageWidth = 5; //显示的页码宽度(多少个)
     private String pageName = "page"; //页码参数名
 
-    public void setPageSize(Integer pageSize) {
+    public PaginatorServiceImpl() {super();}
+
+    public PaginatorServiceImpl(Integer pageSize, Integer pageWidth, String pageName) {
         this.pageSize = pageSize;
-    }
-
-    public void setPageLength(Integer pageLength) {
-        this.pageLength = pageLength;
-    }
-
-    public void setPageName(String pageName) {
+        this.pageWidth = pageWidth;
         this.pageName = pageName;
     }
 
-    public Map<String, Object> paging(Integer total) {
-        Integer pageNum = getPageNum();
-        Integer pageTotal = (new Double(Math.ceil(total/pageSize))).intValue();
-        String queryUrl = getQueryUrl();
-
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("total", total);
-
-        String firstPageUrl = pageNum == 1 ? "" : buildUrl(queryUrl,1);
-        map.put("firstPageUrl", firstPageUrl);
-
-        String prevPageUrl = pageNum == 1 ? "" : buildUrl(queryUrl,pageNum - 1);
-        map.put("prevPageUrl", prevPageUrl);
-
-        String nextPageUrl = pageNum == pageTotal ? "" : buildUrl(queryUrl,pageNum + 1);
-        map.put("nextPageUrl", nextPageUrl);
-
-        String lastPageUrl = pageNum == pageTotal ? "" : buildUrl(queryUrl, pageTotal);
-        map.put("lastPageUrl", lastPageUrl);
-
-        map.put("middlePageUrl", middlePageUrl(pageNum, pageTotal, queryUrl));
-
-        return map;
-    }
+    public Integer getPageSize() { return pageSize; }
 
     /**
      * 获取当前是第几页
      * @return
      */
-    private Integer getPageNum() {
+    public Integer getPageNum() {
+        if (pageNum != null) {
+            return pageNum;
+        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String paramPageNum = request.getParameter(pageName);
-        Integer pageNum;
         if (paramPageNum == null || paramPageNum.length() == 0) {
             pageNum = 1;
         } else {
@@ -106,23 +78,49 @@ public class PaginatorServiceImpl implements PaginatorService {
         return queryUrl;
     }
 
+    public Map<String, Object> paging(long total) {
+        Integer pageNum = getPageNum();
+        Integer pageTotal = (new Double(Math.ceil(total/pageSize))).intValue();
+        String queryUrl = getQueryUrl();
+
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("total", total);
+
+        String firstPageUrl = pageNum == 1 ? "" : buildUrl(queryUrl,1);
+        map.put("firstPageUrl", firstPageUrl);
+
+        String prevPageUrl = pageNum == 1 ? "" : buildUrl(queryUrl,pageNum - 1);
+        map.put("prevPageUrl", prevPageUrl);
+
+        String nextPageUrl = pageNum == pageTotal ? "" : buildUrl(queryUrl,pageNum + 1);
+        map.put("nextPageUrl", nextPageUrl);
+
+        String lastPageUrl = pageNum == pageTotal ? "" : buildUrl(queryUrl, pageTotal);
+        map.put("lastPageUrl", lastPageUrl);
+
+        map.put("middlePageUrl", middlePageUrl(pageNum, pageTotal, queryUrl));
+
+        return map;
+    }
+
     private List<Map<String, Object>> middlePageUrl(Integer pageNum, Integer pageTotal, String queryUrl) {
         Integer start,end;
-        if (pageTotal <= pageLength) {
+        if (pageTotal <= pageWidth) {
             start = 1;
             end = pageTotal;
         } else {
-            double doubleLeftLength = Math.floor((pageLength-1)/2);
+            double doubleLeftLength = Math.floor((pageWidth-1)/2);
             Integer leftLength = (new Double(doubleLeftLength)).intValue();
             start = pageNum - leftLength;
             if (start < 1) {
                 start = 1;
             }
             Integer hasLength = pageNum - start + 1;
-            end = pageNum + (pageLength - hasLength);
+            end = pageNum + (pageWidth - hasLength);
             if (end > pageTotal) {
                 end = pageTotal;
-                start = pageTotal - pageLength + 1;
+                start = pageTotal - pageWidth + 1;
             }
         }
         List<Map<String, Object>> pageList = new ArrayList<>();
