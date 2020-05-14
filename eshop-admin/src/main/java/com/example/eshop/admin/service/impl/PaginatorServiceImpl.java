@@ -80,7 +80,7 @@ public class PaginatorServiceImpl {
 
     public Map<String, Object> paging(long total) {
         Integer pageNum = getPageNum();
-        Integer pageTotal = (new Double(Math.ceil(total/pageSize))).intValue();
+        Integer pageTotal = (int)Math.ceil((float)total / (float)pageSize);
         String queryUrl = getQueryUrl();
 
         Map<String, Object> map = new HashMap<>();
