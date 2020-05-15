@@ -5,3 +5,11 @@
         <li th:unless="${#strings.isEmpty(paginator.nextPageUrl)}"><a th:href="${paginator.nextPageUrl}">下一页</a></li>
         <li th:unless="${#strings.isEmpty(paginator.lastPageUrl)}"><a th:href="${paginator.lastPageUrl}">尾页</a></li>
     </ul>
+
+    <small th:fragment="breadCrumbs">
+        <th:block th:each="item,status:${breadCrumbs}">
+            <a th:if="${item.link != ''}" th:href="${item.link}" th:text="${item.name}"></a>
+            <span th:if="${item.link == ''}" th:text="${item.name}"></span>
+            <span th:if="${status.last == false}" th:text="'>'"></span>
+        </th:block>
+    </small>

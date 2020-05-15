@@ -7,8 +7,7 @@
 <div class="content-wrapper" layout:fragment="main">
     <section class="content-header">
         <h1>
-            系统管理
-            <!--{% include 'breadcrumbs.html' %}-->
+            <small th:replace="common::breadCrumbs"></small>
         </h1>
         <div class="breadcrumb">
             <a href="/admin/system/user/add/" class="btn btn-sm btn-default btn-flat pull-right">>> 添加用户</a>

@@ -15,6 +15,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -41,9 +43,20 @@ public class SystemUserController extends BaseController {
         String queryString = request.getQueryString();
         String currentUrl = queryString == null ? url : url + "?" + queryString;
 
+        List<Map<String, String>> breadCrumbs = new ArrayList<>();
+        Map<String, String> crumbs1 = new HashMap<>();
+        crumbs1.put("name", "系统管理");
+        crumbs1.put("link", "");
+        breadCrumbs.add(crumbs1);
+        Map<String, String> crumbs2 = new HashMap<>();
+        crumbs2.put("name", "用户管理");
+        crumbs2.put("link", "");
+        breadCrumbs.add(crumbs2);
+
         model.addAttribute("list", list);
         model.addAttribute("paginator", paginator);
         model.addAttribute("currentUrl", currentUrl);
+        model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "system/user";
     }
