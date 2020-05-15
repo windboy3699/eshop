@@ -8,7 +8,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,5 +39,11 @@ public class GlobalController {
         map.put("systemGroupName", tokenInfoDto.getSystemGroupName());
         map.put("systemRealname", tokenInfoDto.getSystemRealname());
         return map;
+    }
+
+    @ModelAttribute(name = "referer")
+    public String referer() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return request.getHeader("referer");
     }
 }

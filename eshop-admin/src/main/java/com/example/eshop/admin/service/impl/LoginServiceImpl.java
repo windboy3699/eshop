@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class LoginServiceImpl implements LoginService {
     private static final String KEY = "PC3JNLHRBYQM76VX";
-    private static final Integer EXPIRED = 3600;
+    private static final Integer EXPIRED = 86400;
 
     @Autowired
     private SystemUserService systemUserService;

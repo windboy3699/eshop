@@ -8,7 +8,7 @@
 
     <small th:fragment="breadCrumbs">
         <th:block th:each="item,status:${breadCrumbs}">
-            <a th:if="${item.link != ''}" th:href="${item.link}" th:text="${item.name}"></a>
+            <a th:unless="${item.link == ''}" th:href="${item.link}" th:text="${item.name}"></a>
             <span th:if="${item.link == ''}" th:text="${item.name}"></span>
             <span th:if="${status.last == false}" th:text="'>'"></span>
         </th:block>
