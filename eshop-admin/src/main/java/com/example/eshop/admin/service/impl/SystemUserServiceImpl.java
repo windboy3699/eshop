@@ -31,17 +31,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         return systemUserDao.findByUsernameAndPassword(username, password);
     }
 
-    public Boolean add(SystemUser systemUser) {
-        SystemUser existUser = findByUsername(systemUser.getUsername());
-        if (existUser != null) {
-            return false;
-        }
-        systemUserDao.save(systemUser);
-        if (systemUser.getId() == null) {
-            return false;
-        }
-        return true;
-    }
+    public SystemUser save(SystemUser systemUser) { return systemUserDao.save(systemUser); }
 
     public void deleteById(int id) {
         systemUserDao.deleteById(id);

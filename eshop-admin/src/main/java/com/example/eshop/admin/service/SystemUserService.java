@@ -13,7 +13,7 @@ public interface SystemUserService {
 
     SystemUser findByUsernameAndPassword(String username, String password);
 
-    Boolean add(SystemUser systemUser);
+    SystemUser save(SystemUser systemUser);
 
     void deleteById(int id);
 }

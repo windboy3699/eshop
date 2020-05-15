@@ -2,9 +2,13 @@ package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemUser;
+import com.example.eshop.admin.dto.ResultDto;
+import com.example.eshop.admin.dto.TokenInfoDto;
+import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,17 +16,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -32,6 +38,9 @@ public class SystemUserController extends BaseController {
 
     @Autowired
     private SystemGroupService systemGroupService;
+
+    @Autowired
+    private LoginService loginService;
 
     @RequestMapping("/system/user")
     public String index(Model model) {
@@ -113,4 +122,48 @@ public class SystemUserController extends BaseController {
         return "system/userEdit";
     }
 
+    @RequestMapping(value = "/system/user/save", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDto<String> save(@Valid SystemUser user, BindingResult result) throws JsonProcessingException {
+        ResultDto<String> resultDto = new ResultDto<>();
+        if (result.hasErrors()) {
+            resultDto.setCode(101);
+            resultDto.setMsg("参数错误");
+            return resultDto;
+        }
+
+        if (user.getId() == null) {
+            if (user.getPassword().length() == 0) {
+                resultDto.setCode(102);
+                resultDto.setMsg("缺少密码");
+                return resultDto;
+            }
+
+            SystemUser existUser = systemUserService.findByUsername(user.getUsername());
+            if (existUser != null) {
+                resultDto.setCode(103);
+                resultDto.setMsg("用户名已存在");
+                return resultDto;
+            }
+
+            TokenInfoDto tokenInfoDto = loginService.checkLogin();
+            user.setAddUser(tokenInfoDto.getSystemUsername());
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = df.format(new Date());
+            user.setCreateTime(time);
+        }
+
+        if (user.getPassword().length() != 0) {
+            String password = user.getPassword();
+            String md5Pwd = DigestUtils.md5DigestAsHex(password.getBytes());
+            user.setPassword(md5Pwd);
+        }
+
+        systemUserService.save(user);
+
+        resultDto.setCode(0);
+        resultDto.setMsg("保存成功");
+        return resultDto;
+    }
 }

@@ -4,6 +4,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Table(name="system_user")
 @Entity
@@ -15,10 +16,10 @@ public class SystemUser {
     private Integer id;
     @NotBlank
     private String username;
-    @NotBlank
     private String password;
-    @NotBlank
+    @NotNull
     private Integer groupId;
+    @NotBlank
     private String realname;
     private String addUser;
     private String lastLogin;
