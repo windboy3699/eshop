@@ -41,6 +41,15 @@ public class GlobalController {
         return map;
     }
 
+    @ModelAttribute(name = "currentUrl")
+    public String currentUrl() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String url = new String(request.getRequestURL());
+        String queryString = request.getQueryString();
+        String currentUrl = queryString == null ? url : url + "?" + queryString;
+        return currentUrl;
+    }
+
     @ModelAttribute(name = "referer")
     public String referer() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();

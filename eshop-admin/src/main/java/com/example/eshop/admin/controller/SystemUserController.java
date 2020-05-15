@@ -54,11 +54,6 @@ public class SystemUserController extends BaseController {
         List<SystemUser> list = pageSystemUser.getContent();
         Map<String, Object> paginator = paginatorServiceImpl.paging(pageSystemUser.getTotalElements());
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String url = new String(request.getRequestURL());
-        String queryString = request.getQueryString();
-        String currentUrl = queryString == null ? url : url + "?" + queryString;
-
         List<Map<String, String>> breadCrumbs = new ArrayList<>();
         Map<String, String> crumbs1 = new HashMap<>();
         crumbs1.put("name", "系统管理");
@@ -71,7 +66,6 @@ public class SystemUserController extends BaseController {
 
         model.addAttribute("list", list);
         model.addAttribute("paginator", paginator);
-        model.addAttribute("currentUrl", currentUrl);
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "system/user";
@@ -166,4 +160,15 @@ public class SystemUserController extends BaseController {
         resultDto.setMsg("保存成功");
         return resultDto;
     }
+
+    @RequestMapping(value = "/system/user/delete", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultDto<String> delete(@RequestParam Integer id) {
+        systemUserService.deleteById(id);
+        ResultDto<String> resultDto = new ResultDto<>();
+        resultDto.setCode(0);
+        resultDto.setMsg("删除成功");
+        return resultDto;
+    }
+
 }

@@ -42,7 +42,7 @@
                                 <td th:text="${item.createTime}"></td>
                                 <td>
                                     <a th:href="'/admin/system/user/edit?id='+${item.id}">编辑</a>
-                                    <a class="J_Do_Get" th:data-get-url="'/admin/system/user/delete?id='+${item.id}" data-redirect="${currentUrl}">删除</a>
+                                    <a class="J_Do_Get" th:data-get-url="'/admin/system/user/delete?id='+${item.id}" th:data-redirect="${currentUrl}">删除</a>
                                 </td>
                             </tr>
                         </table>
