@@ -32,7 +32,7 @@ public class SystemGroupController {
 
     @RequestMapping("/system/group")
     public String index(Model model) {
-        PaginatorServiceImpl paginatorServiceImpl = new PaginatorServiceImpl(2,5,"page");
+        PaginatorServiceImpl paginatorServiceImpl = new PaginatorServiceImpl(10,5,"page");
         Integer pageNum = paginatorServiceImpl.getPageNum() - 1;
         Integer pageSize = paginatorServiceImpl.getPageSize();
 

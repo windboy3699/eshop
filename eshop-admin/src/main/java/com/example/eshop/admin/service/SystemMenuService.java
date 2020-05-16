@@ -16,4 +16,6 @@ public interface SystemMenuService {
     List<SystemMenu> findByLevel(Integer level);
 
     List<SystemMenu> findByIdIn(List<Integer> ids);
+
+    SystemMenu save(SystemMenu systemMenu);
 }

@@ -30,4 +30,6 @@ public class SystemMenuServiceImpl implements SystemMenuService {
     }
 
     public List<SystemMenu> findByIdIn(List<Integer> ids) { return systemMenuDao.findByIdIn(ids); }
+
+    public SystemMenu save(SystemMenu systemMenu) {return systemMenuDao.save(systemMenu); }
 }

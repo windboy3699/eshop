@@ -1,6 +1,7 @@
 package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.domain.SystemMenu;
+import com.example.eshop.admin.dto.ResultDto;
 import com.example.eshop.admin.service.SystemMenuService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,7 +26,7 @@ public class SystemMenuController {
     @RequestMapping("/system/menu")
     public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer topid) {
 
-        PaginatorServiceImpl paginatorServiceImpl = new PaginatorServiceImpl(2,5,"page");
+        PaginatorServiceImpl paginatorServiceImpl = new PaginatorServiceImpl(10,5,"page");
         Integer pageNum = paginatorServiceImpl.getPageNum() - 1;
         Integer pageSize = paginatorServiceImpl.getPageSize();
 
@@ -104,5 +103,32 @@ public class SystemMenuController {
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "system/menuEdit";
+    }
+
+    @RequestMapping("/system/menu/save")
+    @ResponseBody
+    public ResultDto<String> save(SystemMenu menu) {
+        ResultDto<String> resultDto = new ResultDto<>();
+
+        if (menu.getName() == null || menu.getName().length() == 0) {
+            resultDto.setCode(101);
+            resultDto.setMsg("缺少名称");
+            return resultDto;
+        }
+        if (menu.getTopid() == 0) {
+            menu.setLevel(1);
+        } else {
+            SystemMenu topMenu = systemMenuService.findById(menu.getTopid());
+            if (topMenu.getTopid() == 0) {
+                menu.setLevel(2);
+            } else {
+                menu.setLevel(3);
+            }
+        }
+        systemMenuService.save(menu);
+
+        resultDto.setCode(0);
+        resultDto.setMsg("保存成功");
+        return resultDto;
     }
 }
