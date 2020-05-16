@@ -4,7 +4,7 @@ import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemMenu;
 import com.example.eshop.admin.dto.SystemMenuDto;
 import com.example.eshop.admin.service.SystemGroupService;
-import com.example.eshop.admin.service.SystemPrivMenuService;
+import com.example.eshop.admin.service.SystemMultiStageMenuService;
 import com.example.eshop.admin.service.SystemMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,50 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class SystemPrivMenuServiceImpl implements SystemPrivMenuService {
+public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuService {
     @Autowired
     private SystemMenuService systemMenuService;
 
     @Autowired
     private SystemGroupService systemGroupService;
 
-    public List<SystemMenuDto> get(int groupId) {
+    public List<SystemMenuDto> getAll(int groupId) {
+        SystemGroup group = null;
+        List<Integer> idList = new ArrayList<>();
+        if (groupId > 0) {
+            group = systemGroupService.findById(groupId);
+            List<String> strIdList = Arrays.asList(group.getMenus().split(","));
+            for (String strId : strIdList) {
+                idList.add(Integer.parseInt(strId));
+            }
+        }
+        List<SystemMenu> allMenu = systemMenuService.findAll();
+        List<SystemMenuDto> systemMenuDtoList = new ArrayList<>();
+        for (SystemMenu item : allMenu) {
+            SystemMenuDto systemMenuDto = new SystemMenuDto();
+            systemMenuDto.setId(item.getId());
+            systemMenuDto.setName(item.getName());
+            systemMenuDto.setTopid(item.getTopid());
+            systemMenuDto.setLink(item.getLink());
+            systemMenuDtoList.add(systemMenuDto);
+            if (group != null && !idList.isEmpty() && idList.contains(item.getId())) {
+                systemMenuDto.setActive(true);
+            }
+        }
+        List<SystemMenuDto> rootMenu = new ArrayList<>();
+        for (SystemMenuDto item : systemMenuDtoList) {
+            if (item.getTopid().equals(0)) {
+                rootMenu.add(item);
+            }
+        }
+        for (SystemMenuDto item : rootMenu) {
+            List<SystemMenuDto> children = getChildren(item.getId(), systemMenuDtoList);
+            item.setChildren(children);
+        }
+        return rootMenu;
+    }
+
+    public List<SystemMenuDto> getByGroupId(int groupId) {
         List<SystemMenu> allMenu = systemMenuService.findAll();
 
         Map<Integer, SystemMenu> mappedAllMenu = new HashMap<>();
@@ -89,7 +125,6 @@ public class SystemPrivMenuServiceImpl implements SystemPrivMenuService {
                 item.setActive(true);
             }
         }
-
         List<SystemMenuDto> rootMenu = new ArrayList<>();
         for (SystemMenuDto item : systemMenuDtoList) {
             if (item.getTopid().equals(0)) {
@@ -100,7 +135,6 @@ public class SystemPrivMenuServiceImpl implements SystemPrivMenuService {
             List<SystemMenuDto> children = getChildren(item.getId(), systemMenuDtoList);
             item.setChildren(children);
         }
-
         return rootMenu;
     }
 
