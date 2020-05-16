@@ -1,6 +1,8 @@
 package com.example.eshop.admin.dao;
 
 import com.example.eshop.admin.domain.SystemMenu;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,8 @@ public interface SystemMenuDao extends JpaRepository<SystemMenu, Integer> {
 
     @Query(value = "select * from system_menu where visible = 1 order by sort,id asc", nativeQuery = true)
     List<SystemMenu> findAll();
+
+    Page<SystemMenu> findByTopid(Integer topid, Pageable page);
 
     List<SystemMenu> findByIdIn(List<Integer> ids);
 }

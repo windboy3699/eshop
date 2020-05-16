@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{base.html}" >
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="main">
+    <section class="content-header">
+        <h1>
+            <small th:replace="common::breadCrumbs"></small>
+        </h1>
+        <div class="breadcrumb">
+            <a th:if="${addMenu}" th:href="'/admin/system/menu/add?topid='+${topid}" class="btn btn-sm btn-default btn-flat pull-right">>> 添加菜单</a>
+        </div>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">菜单列表</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th style="width: 50px">ID</th>
+                                <th>名称</th>
+                                <th>层级</th>
+                                <th>上级ID</th>
+                                <th>路径</th>
+                                <th>状态</th>
+                                <th>排序</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr th:each="item:${list}">
+                                <td th:text="${item.id}"></td>
+                                <td th:text="${item.name}"></td>
+                                <td th:text="${item.level}"></td>
+                                <td th:text="${item.topid}"></td>
+                                <td th:text="${item.path}"></td>
+                                <td th:text="${item.visible}"></td>
+                                <td th:text="${item.sort}"></td>
+                                <td>
+                                    <a th:if="${item.level < 3}" th:href="'/admin/system/menu?topid='+${item.id}">查看</a>
+                                    <a th:href="'/admin/system/menu/edit?id='+${item.id}">编辑</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="box-footer clearfix">
+                        <ul th:replace="common::paginator"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
