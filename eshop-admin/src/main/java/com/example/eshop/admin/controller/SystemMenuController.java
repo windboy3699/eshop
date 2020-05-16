@@ -63,4 +63,46 @@ public class SystemMenuController {
 
         return "system/menu";
     }
+
+    @RequestMapping("/system/menu/add")
+    public String add(Model model, @RequestParam(required = false, defaultValue = "0") Integer topid) {
+        List<Map<String, String>> breadCrumbs = new ArrayList<>();
+        Map<String, String> crumbs1 = new HashMap<>();
+        crumbs1.put("name", "系统管理");
+        crumbs1.put("link", "");
+        breadCrumbs.add(crumbs1);
+        Map<String, String> crumbs2 = new HashMap<>();
+        crumbs2.put("name", "菜单添加");
+        crumbs2.put("link", "");
+        breadCrumbs.add(crumbs2);
+
+        model.addAttribute("menu", null);
+        model.addAttribute("topid", topid);
+        model.addAttribute("sort", 100);
+        model.addAttribute("visible", 1);
+        model.addAttribute("breadCrumbs", breadCrumbs);
+
+        return "system/menuEdit";
+    }
+
+    @RequestMapping("/system/menu/edit")
+    public String edit(Model model, @RequestParam Integer id) {
+
+        List<Map<String, String>> breadCrumbs = new ArrayList<>();
+        Map<String, String> crumbs1 = new HashMap<>();
+        crumbs1.put("name", "系统管理");
+        crumbs1.put("link", "");
+        breadCrumbs.add(crumbs1);
+        Map<String, String> crumbs2 = new HashMap<>();
+        crumbs2.put("name", "菜单编辑");
+        crumbs2.put("link", "");
+        breadCrumbs.add(crumbs2);
+
+        SystemMenu menu = systemMenuService.findById(id);
+
+        model.addAttribute("menu", menu);
+        model.addAttribute("breadCrumbs", breadCrumbs);
+
+        return "system/menuEdit";
+    }
 }
