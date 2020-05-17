@@ -24,8 +24,13 @@ public class GlobalController {
     @Autowired
     private SystemMultiStageMenuService systemMultiStageMenuService;
 
+    @ModelAttribute(name = "staticBaseUrl")
+    public String staticBaseUrl() {
+        return "/admin/static";
+    }
+
     @ModelAttribute(name = "systemInfo")
-    public Map<String, Object> leftMenu() throws JsonProcessingException {
+    public Map<String, Object> systemInfo() throws JsonProcessingException {
         TokenInfoDto tokenInfoDto = loginService.checkLogin();
         if (tokenInfoDto == null) {
             return null;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/admin")
-public class LoginController extends BaseController {
+public class LoginController {
     @Autowired
     private LoginService loginService;
 

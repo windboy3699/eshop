@@ -29,7 +29,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemUserController extends BaseController {
+public class SystemUserController {
     @Autowired
     private SystemUserService systemUserService;
 
