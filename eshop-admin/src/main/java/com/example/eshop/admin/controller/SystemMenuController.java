@@ -23,6 +23,15 @@ public class SystemMenuController {
     @Autowired
     private SystemMenuService systemMenuService;
 
+    private List<Map<String, String>> getBaseBreadCrumbs() {
+        List<Map<String, String>> breadCrumbs = new ArrayList<>();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "系统管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+        return breadCrumbs;
+    }
+
     @RequestMapping("/system/menu")
     public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer topid) {
 
@@ -44,15 +53,11 @@ public class SystemMenuController {
             }
         }
 
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "菜单管理");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "菜单管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("topid", topid);
         model.addAttribute("addMenu", addMenu);
@@ -65,15 +70,11 @@ public class SystemMenuController {
 
     @RequestMapping("/system/menu/add")
     public String add(Model model, @RequestParam(required = false, defaultValue = "0") Integer topid) {
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "菜单添加");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "菜单添加");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("menu", null);
         model.addAttribute("topid", topid);
@@ -86,18 +87,13 @@ public class SystemMenuController {
 
     @RequestMapping("/system/menu/edit")
     public String edit(Model model, @RequestParam Integer id) {
-
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "菜单编辑");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
-
         SystemMenu menu = systemMenuService.findById(id);
+
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "菜单编辑");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("menu", menu);
         model.addAttribute("breadCrumbs", breadCrumbs);

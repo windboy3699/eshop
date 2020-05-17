@@ -30,6 +30,15 @@ public class SystemGroupController {
     @Autowired
     private SystemMultiStageMenuService systemMultiStageMenuService;
 
+    private List<Map<String, String>> getBaseBreadCrumbs() {
+        List<Map<String, String>> breadCrumbs = new ArrayList<>();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "系统管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+        return breadCrumbs;
+    }
+
     @RequestMapping("/system/group")
     public String index(Model model) {
         PaginatorServiceImpl paginatorServiceImpl = new PaginatorServiceImpl(10,5,"page");
@@ -42,15 +51,11 @@ public class SystemGroupController {
         List<SystemGroup> list = pageSystemGroup.getContent();
         Map<String, Object> paginator = paginatorServiceImpl.paging(pageSystemGroup.getTotalElements());
 
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "用户组管理");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "用户组管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("list", list);
         model.addAttribute("paginator", paginator);
@@ -61,44 +66,36 @@ public class SystemGroupController {
 
     @RequestMapping("/system/group/add")
     public String add(Model model) {
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "用户组添加");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
-
         List<SystemMenuDto> systemMenuDtoList = systemMultiStageMenuService.getAll(0);
 
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "用户组添加");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+
         model.addAttribute("group", null);
-        model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("allMenu", systemMenuDtoList);
+        model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "system/groupEdit";
     }
 
     @RequestMapping("/system/group/edit")
     public String edit(Model model, @RequestParam Integer id) {
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "用户组编辑");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
-
         SystemGroup group = systemGroupService.findById(id);
 
         List<SystemMenuDto> systemMenuDtoList = systemMultiStageMenuService.getAll(id);
 
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "用户组编辑");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+
         model.addAttribute("group", group);
-        model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("allMenu", systemMenuDtoList);
+        model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "system/groupEdit";
     }

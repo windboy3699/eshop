@@ -39,6 +39,15 @@ public class SystemUserController {
     @Autowired
     private LoginService loginService;
 
+    private List<Map<String, String>> getBaseBreadCrumbs() {
+        List<Map<String, String>> breadCrumbs = new ArrayList<>();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "系统管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+        return breadCrumbs;
+    }
+
     @RequestMapping("/system/user")
     public String index(Model model) {
         PaginatorServiceImpl paginatorServiceImpl = new PaginatorServiceImpl(10,5,"page");
@@ -51,15 +60,11 @@ public class SystemUserController {
         List<SystemUser> list = pageSystemUser.getContent();
         Map<String, Object> paginator = paginatorServiceImpl.paging(pageSystemUser.getTotalElements());
 
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "用户管理");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "用户管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("list", list);
         model.addAttribute("paginator", paginator);
@@ -70,17 +75,13 @@ public class SystemUserController {
 
     @RequestMapping("/system/user/add")
     public String add(Model model) {
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "用户添加");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
-
         List<SystemGroup> groupList = systemGroupService.findAll();
+
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "用户添加");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("user", null);
         model.addAttribute("groupList", groupList);
@@ -91,20 +92,15 @@ public class SystemUserController {
 
     @RequestMapping(value = "/system/user/edit", method = RequestMethod.GET)
     public String edit(Model model, @RequestParam Integer id) {
-
         SystemUser user = systemUserService.findById(id);
 
         List<SystemGroup> groupList = systemGroupService.findAll();
 
-        List<Map<String, String>> breadCrumbs = new ArrayList<>();
-        Map<String, String> crumbs1 = new HashMap<>();
-        crumbs1.put("name", "系统管理");
-        crumbs1.put("link", "");
-        breadCrumbs.add(crumbs1);
-        Map<String, String> crumbs2 = new HashMap<>();
-        crumbs2.put("name", "用户编辑");
-        crumbs2.put("link", "");
-        breadCrumbs.add(crumbs2);
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "用户编辑");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
 
         model.addAttribute("user", user);
         model.addAttribute("groupList", groupList);
