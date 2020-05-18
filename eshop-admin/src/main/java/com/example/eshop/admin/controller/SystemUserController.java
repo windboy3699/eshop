@@ -116,17 +116,14 @@ public class SystemUserController extends BaseController {
         if (result.hasErrors()) {
             return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
-
         if (user.getId() == null) {
             if (user.getPassword().length() == 0) {
                 return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
             }
-
             SystemUser existUser = systemUserService.findByUsername(user.getUsername());
             if (existUser != null) {
                 return createResponseDto(50101, "用户名已存在");
             }
-
             TokenInfoDto tokenInfoDto = loginService.checkLogin();
             user.setAddUser(tokenInfoDto.getSystemUsername());
 
@@ -134,15 +131,14 @@ public class SystemUserController extends BaseController {
             String time = df.format(new Date());
             user.setCreateTime(time);
         }
-
-        if (user.getPassword().length() != 0) {
+        if (user.getPassword().length() == 0) {
+            user.setPassword(null);
+        } else {
             String password = user.getPassword();
             String md5Pwd = DigestUtils.md5DigestAsHex(password.getBytes());
             user.setPassword(md5Pwd);
         }
-
         systemUserService.save(user);
-
         return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 
