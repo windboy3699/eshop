@@ -3,7 +3,7 @@ package com.example.eshop.admin.service.impl;
 import com.example.eshop.admin.dao.SystemUserDao;
 import com.example.eshop.admin.domain.SystemUser;
 import com.example.eshop.admin.service.SystemUserService;
-import com.example.eshop.admin.util.DatabaseUtil;
+import com.example.eshop.admin.util.ReflectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +34,9 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     public SystemUser save(SystemUser systemUser) {
         if (systemUser.getId() != null) {
-            SystemUser originUser = findById(systemUser.getId());
-            DatabaseUtil.updateDomain(systemUser, originUser);
-            return systemUserDao.save(originUser);
+            SystemUser originSystemUser = findById(systemUser.getId());
+            ReflectionUtil.copyNotNullProperties(systemUser, originSystemUser);
+            return systemUserDao.save(originSystemUser);
         }
         return systemUserDao.save(systemUser);
     }
