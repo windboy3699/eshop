@@ -1,8 +1,9 @@
 package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.domain.SystemGroup;
-import com.example.eshop.admin.dto.ResultDto;
+import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.dto.SystemMenuDto;
+import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemMultiStageMenuService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
@@ -23,7 +24,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemGroupController {
+public class SystemGroupController extends BaseController {
     @Autowired
     private SystemGroupService systemGroupService;
 
@@ -102,12 +103,9 @@ public class SystemGroupController {
 
     @RequestMapping(value = "/system/group/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResultDto<String> save(@RequestParam(required = false) Integer id, @RequestParam String name, @RequestParam("menus[]") List<String> menus) {
-        ResultDto<String> resultDto = new ResultDto<>();
+    public ResponseDto<Object> save(@RequestParam(required = false) Integer id, @RequestParam String name, @RequestParam("menus[]") List<String> menus) {
         if (name.length() == 0 || menus.isEmpty()) {
-            resultDto.setCode(101);
-            resultDto.setMsg("缺少参数");
-            return resultDto;
+            return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         SystemGroup group = new SystemGroup();
         group.setName(name);
@@ -116,8 +114,6 @@ public class SystemGroupController {
             group.setId(id);
         }
         systemGroupService.save(group);
-        resultDto.setCode(0);
-        resultDto.setMsg("保存成功");
-        return resultDto;
+        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }

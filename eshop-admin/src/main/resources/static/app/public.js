@@ -122,24 +122,24 @@
 
                 $.post( _action, _form.serialize(), function(d){
                     if( d && d.code == 0 ){
-                        d.msg && alert( d.msg );
+                        d.message && alert( d.message );
                         if( !!_redirect ){
                             window.location.href = _redirect;
                         }
                     } else {
-                        d.msg && alert( d.msg );
+                        d.message && alert( d.message );
                     }
                 });
                 // UTILS.load(_action + _params.join("") , {
                 //     cb: 'cb'
                 // }, function(d){
                 //     if( d && d.code == 0 ){
-                //         d.msg && alert( d.msg );
+                //         d.message && alert( d.message );
                 //         if( !!_redirect ){
                 //             window.location.href = _redirect;
                 //         }
                 //     } else {
-                //         d.msg && alert( d.msg );
+                //         d.message && alert( d.message );
                 //     }
                 // });
 
@@ -155,24 +155,24 @@
 
             $.getJSON(_url, function(d){
                 if( d && d.code == 0 ){
-                    d.msg && alert( d.msg );
+                    d.message && alert( d.message );
                     if( !!_redirect ){
                         window.location.href = _redirect;
                     }
                 } else {
-                    d.msg && alert(d.msg);
+                    d.message && alert(d.message);
                 }
             });
             // UTILS.load( _url, {
             //     cb: 'cb'
             // }, function(d){
             //     if( d && d.code == 0 ){
-            //         d.msg && alert( d.msg );
+            //         d.message && alert( d.message );
             //         if( !!_redirect ){
             //             window.location.href = _redirect;
             //         }
             //     } else {
-            //         d.msg && alert(d.msg);
+            //         d.message && alert(d.message);
             //     }
             // });
         });
@@ -300,24 +300,24 @@
 
                 $.post( _action, _form.serialize(), function(d){
                     if( d && d.code == 0 ){
-                        d.msg && alert( d.msg );
+                        d.message && alert( d.message );
                         if( !!_redirect ){
                             window.location.href = _redirect;
                         }
                     } else {
-                        d.msg && alert( d.msg );
+                        d.message && alert( d.message );
                     }
                 });
                 // UTILS.load(_action + _params.join("") , {
                 //     cb: 'cb'
                 // }, function(d){
                 //     if( d && d.code == 0 ){
-                //         d.msg && alert( d.msg );
+                //         d.message && alert( d.message );
                 //         if( !!_redirect ){
                 //             window.location.href = _redirect;
                 //         }
                 //     } else {
-                //         d.msg && alert( d.msg );
+                //         d.message && alert( d.message );
                 //     }
                 // });
 
@@ -333,24 +333,24 @@
 
             $.getJSON(_url, function(d){
                 if( d && d.code == 0 ){
-                    d.msg && alert( d.msg );
+                    d.message && alert( d.message );
                     if( !!_redirect ){
                         window.location.href = _redirect;
                     }
                 } else {
-                    d.msg && alert(d.msg);
+                    d.message && alert(d.message);
                 }
             });
             // UTILS.load( _url, {
             //     cb: 'cb'
             // }, function(d){
             //     if( d && d.code == 0 ){
-            //         d.msg && alert( d.msg );
+            //         d.message && alert( d.message );
             //         if( !!_redirect ){
             //             window.location.href = _redirect;
             //         }
             //     } else {
-            //         d.msg && alert(d.msg);
+            //         d.message && alert(d.message);
             //     }
             // });
         });

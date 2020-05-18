@@ -1,7 +1,8 @@
 package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.domain.SystemMenu;
-import com.example.eshop.admin.dto.ResultDto;
+import com.example.eshop.admin.dto.ResponseDto;
+import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.SystemMenuService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemMenuController {
+public class SystemMenuController extends BaseController {
     @Autowired
     private SystemMenuService systemMenuService;
 
@@ -103,13 +104,9 @@ public class SystemMenuController {
 
     @RequestMapping("/system/menu/save")
     @ResponseBody
-    public ResultDto<String> save(SystemMenu menu) {
-        ResultDto<String> resultDto = new ResultDto<>();
-
+    public ResponseDto<Object> save(SystemMenu menu) {
         if (menu.getName() == null || menu.getName().length() == 0) {
-            resultDto.setCode(101);
-            resultDto.setMsg("缺少名称");
-            return resultDto;
+            return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         if (menu.getTopid() == 0) {
             menu.setLevel(1);
@@ -123,8 +120,6 @@ public class SystemMenuController {
         }
         systemMenuService.save(menu);
 
-        resultDto.setCode(0);
-        resultDto.setMsg("保存成功");
-        return resultDto;
+        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }

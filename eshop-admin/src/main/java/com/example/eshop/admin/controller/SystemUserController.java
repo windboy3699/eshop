@@ -2,8 +2,9 @@ package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemUser;
-import com.example.eshop.admin.dto.ResultDto;
+import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.dto.TokenInfoDto;
+import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
@@ -29,7 +30,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemUserController {
+public class SystemUserController extends BaseController {
     @Autowired
     private SystemUserService systemUserService;
 
@@ -111,26 +112,19 @@ public class SystemUserController {
 
     @RequestMapping(value = "/system/user/save", method = RequestMethod.POST)
     @ResponseBody
-    public ResultDto<String> save(@Valid SystemUser user, BindingResult result) throws JsonProcessingException {
-        ResultDto<String> resultDto = new ResultDto<>();
+    public ResponseDto<Object> save(@Valid SystemUser user, BindingResult result) throws JsonProcessingException {
         if (result.hasErrors()) {
-            resultDto.setCode(101);
-            resultDto.setMsg("参数错误");
-            return resultDto;
+            return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
 
         if (user.getId() == null) {
             if (user.getPassword().length() == 0) {
-                resultDto.setCode(102);
-                resultDto.setMsg("缺少密码");
-                return resultDto;
+                return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
             }
 
             SystemUser existUser = systemUserService.findByUsername(user.getUsername());
             if (existUser != null) {
-                resultDto.setCode(103);
-                resultDto.setMsg("用户名已存在");
-                return resultDto;
+                return createResponseDto(50101, "用户名已存在");
             }
 
             TokenInfoDto tokenInfoDto = loginService.checkLogin();
@@ -149,18 +143,13 @@ public class SystemUserController {
 
         systemUserService.save(user);
 
-        resultDto.setCode(0);
-        resultDto.setMsg("保存成功");
-        return resultDto;
+        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 
     @RequestMapping(value = "/system/user/delete", method = RequestMethod.GET)
     @ResponseBody
-    public ResultDto<String> delete(@RequestParam Integer id) {
+    public ResponseDto<Object> delete(@RequestParam Integer id) {
         systemUserService.deleteById(id);
-        ResultDto<String> resultDto = new ResultDto<>();
-        resultDto.setCode(0);
-        resultDto.setMsg("删除成功");
-        return resultDto;
+        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }

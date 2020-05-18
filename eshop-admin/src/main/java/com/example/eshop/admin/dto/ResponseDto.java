@@ -1,8 +1,8 @@
 package com.example.eshop.admin.dto;
 
-public class ResultDto<T> {
+public class ResponseDto<T> {
     private Integer code;
-    private String msg;
+    private String message;
     private T data;
 
     public Integer getCode() {
@@ -13,12 +13,12 @@ public class ResultDto<T> {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public T getData() {

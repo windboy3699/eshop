@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-public class PlayGroundController {
+public class PlayGroundController extends BaseController {
     @Autowired
     private UserService userService;
 
