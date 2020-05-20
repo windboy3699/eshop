@@ -24,7 +24,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemGroupController extends BaseController {
+public class SystemGroupController {
     @Autowired
     private SystemGroupService systemGroupService;
 
@@ -105,7 +105,7 @@ public class SystemGroupController extends BaseController {
     @ResponseBody
     public ResponseDto<Object> save(@RequestParam(required = false) Integer id, @RequestParam String name, @RequestParam("menus[]") List<String> menus) {
         if (name.length() == 0 || menus.isEmpty()) {
-            return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         SystemGroup group = new SystemGroup();
         group.setName(name);
@@ -114,6 +114,6 @@ public class SystemGroupController extends BaseController {
             group.setId(id);
         }
         systemGroupService.save(group);
-        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }

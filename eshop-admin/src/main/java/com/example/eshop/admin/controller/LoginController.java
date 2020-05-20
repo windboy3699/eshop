@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/admin")
-public class LoginController extends BaseController {
+public class LoginController {
     @Autowired
     private LoginService loginService;
 
@@ -26,8 +26,8 @@ public class LoginController extends BaseController {
     public ResponseDto<Object> checkLogin(@RequestParam String username, @RequestParam String password) {
         Boolean loginResult = loginService.doLogin(username, password);
         if (loginResult == false) {
-            return createResponseDto(50101, "用户名或密码错误");
+            return ResponseDto.create(50101, "用户名或密码错误");
         }
-        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), "登录成功");
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), "登录成功");
     }
 }

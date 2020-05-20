@@ -23,7 +23,7 @@ public class ReflectionUtil {
                 if (readMethod.invoke(source) != null) {
                     writeMethod.invoke(target, readMethod.invoke(source));
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
         }

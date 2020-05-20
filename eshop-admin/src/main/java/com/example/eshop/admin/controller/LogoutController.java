@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/admin")
-public class LogoutController extends BaseController {
+public class LogoutController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 

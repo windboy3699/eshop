@@ -20,7 +20,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemMenuController extends BaseController {
+public class SystemMenuController {
     @Autowired
     private SystemMenuService systemMenuService;
 
@@ -106,7 +106,7 @@ public class SystemMenuController extends BaseController {
     @ResponseBody
     public ResponseDto<Object> save(SystemMenu menu) {
         if (menu.getName() == null || menu.getName().length() == 0) {
-            return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         if (menu.getTopid() == 0) {
             menu.setLevel(1);
@@ -120,6 +120,6 @@ public class SystemMenuController extends BaseController {
         }
         systemMenuService.save(menu);
 
-        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }

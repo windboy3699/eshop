@@ -30,7 +30,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class SystemUserController extends BaseController {
+public class SystemUserController {
     @Autowired
     private SystemUserService systemUserService;
 
@@ -114,15 +114,15 @@ public class SystemUserController extends BaseController {
     @ResponseBody
     public ResponseDto<Object> save(@Valid SystemUser user, BindingResult result) throws JsonProcessingException {
         if (result.hasErrors()) {
-            return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         if (user.getId() == null) {
             if (user.getPassword().length() == 0) {
-                return createResponseDto(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+                return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
             }
             SystemUser existUser = systemUserService.findByUsername(user.getUsername());
             if (existUser != null) {
-                return createResponseDto(50101, "用户名已存在");
+                return ResponseDto.create(50101, "用户名已存在");
             }
             TokenInfoDto tokenInfoDto = loginService.checkLogin();
             user.setAddUser(tokenInfoDto.getSystemUsername());
@@ -139,13 +139,13 @@ public class SystemUserController extends BaseController {
             user.setPassword(md5Pwd);
         }
         systemUserService.save(user);
-        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 
     @RequestMapping(value = "/system/user/delete", method = RequestMethod.GET)
     @ResponseBody
     public ResponseDto<Object> delete(@RequestParam Integer id) {
         systemUserService.deleteById(id);
-        return createResponseDto(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }
