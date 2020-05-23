@@ -15,12 +15,15 @@ public class LogoutController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private String loginUrl;
+
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         String token = CookieUtil.get(request, "systemToken");
         CookieUtil.remove(response, "username");
         CookieUtil.remove(response, "token");
         stringRedisTemplate.delete(token);
-        return "redirect:/admin/login";
+        return "redirect:" + loginUrl;
     }
 }
