@@ -7,6 +7,8 @@ import java.util.List;
 public interface GoodsCategoryService {
     GoodsCategory findById(Integer id);
 
+    List<GoodsCategory> findAll();
+
     List<GoodsCategory> findByParentId(Integer parentId);
 
     GoodsCategory save(GoodsCategory category);

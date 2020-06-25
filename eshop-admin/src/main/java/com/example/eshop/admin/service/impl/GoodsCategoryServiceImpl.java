@@ -19,6 +19,8 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         return item.get();
     }
 
+    public List<GoodsCategory> findAll() { return goodsCategoryDao.findAll(); }
+
     public List<GoodsCategory> findByParentId(Integer parentId) {
         return goodsCategoryDao.findByParentId(parentId);
     }

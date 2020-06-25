@@ -35,6 +35,13 @@ public class GoodsCategoryController {
     public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer parentId) {
         List<GoodsCategory> list = goodsCategoryService.findByParentId(parentId);
 
+        List<GoodsCategory> allCategoryList = goodsCategoryService.findAll();
+        Map<Integer, String> allCategory = new HashMap<>();
+        allCategory.put(0, "无");
+        for (GoodsCategory item : allCategoryList) {
+            allCategory.put(item.getId(), item.getName());
+        }
+
         List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
         Map<String, String> crumbs = new HashMap<>();
         crumbs.put("name", "分类管理");
@@ -42,6 +49,7 @@ public class GoodsCategoryController {
         breadCrumbs.add(crumbs);
 
         model.addAttribute("list", list);
+        model.addAttribute("allCategory", allCategory);
         model.addAttribute("parentId", parentId);
         model.addAttribute("breadCrumbs", breadCrumbs);
         return "goods/category";

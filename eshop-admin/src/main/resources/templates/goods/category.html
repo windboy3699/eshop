@@ -32,7 +32,7 @@
                             <tr th:each="item:${list}">
                                 <td th:text="${item.id}"></td>
                                 <td th:text="${item.name}"></td>
-                                <td th:text="${item.parentId}"></td>
+                                <td th:text="${allCategory[item.parentId]}"></td>
                                 <td th:text="${item.sort}"></td>
                                 <td>
                                     <a th:href="'/admin/goods/category?parentId='+${item.id}">查看</a>
