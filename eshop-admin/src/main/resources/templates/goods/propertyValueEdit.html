@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{base.html}" >
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="main">
+    <section class="content-header">
+        <h1>
+            <small th:replace="common::breadCrumbs"></small>
+        </h1>
+        <div class="breadcrumb">
+            <a th:href="'/admin/goods/category/property/value?propertyId='+${propertyId}" class="btn btn-sm btn-default btn-flat pull-right">>> 属性值列表</a>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <!-- right column -->
+            <div class="col-xs-12">
+                <!-- Horizontal Form -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">属性值添加</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal" action="/admin/goods/category/property/value/save" method="post" th:data-redirect="${referer}">
+                        <input th:if="${propertyValue}" type="hidden" name="id" th:value="${propertyValue.id}">
+                        <input type="hidden" name="propertyId" th:value="${propertyValue} ? ${propertyValue.propertyId} : ${propertyId}">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">分类</label>
+
+                                <div class="col-sm-10">
+                                    <span th:text="${categoryName}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">属性</label>
+
+                                <div class="col-sm-10">
+                                    <span th:text="${propertyName}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">名称</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" name="name" th:value="${propertyValue} ? ${propertyValue.name} : ''" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-default" onclick="javascript:history.go(-1);">返 回</button>
+                            <button type="submit" class="btn btn-info pull-right J_Do_Post">提 交</button>
+                        </div>
+                        <!-- /.box-footer -->
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+    </section>
+</div>
+<body>
