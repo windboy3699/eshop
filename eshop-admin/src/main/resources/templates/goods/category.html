@@ -27,17 +27,19 @@
                                 <th>名称</th>
                                 <th>父类</th>
                                 <th>排序</th>
-                                <th>操作</th>
+                                <th style="width: 50px">子类</th>
+                                <th style="width: 50px">属性</th>
+                                <th style="width: 50px">操作</th>
                             </tr>
                             <tr th:each="item:${list}">
                                 <td th:text="${item.id}"></td>
                                 <td th:text="${item.name}"></td>
-                                <td th:text="${allCategory[item.parentId]}"></td>
+                                <td th:text="${parentsNameMap[item.id]}"></td>
                                 <td th:text="${item.sort}"></td>
-                                <td>
-                                    <a th:href="'/admin/goods/category?parentId='+${item.id}">查看</a>
-                                    <a th:href="'/admin/goods/category/edit?id='+${item.id}">编辑</a>
-                                </td>
+                                <td th:if="${hasSonMap[item.id] == true}"><a th:href="'/admin/goods/category?parentId='+${item.id}">查看</a></td>
+                                <td th:unless="${hasSonMap[item.id] == true}"></td>
+                                <td><a th:href="'/admin/goods/category?parentId='+${item.id}">管理</a></td>
+                                <td><a th:href="'/admin/goods/category/edit?id='+${item.id}">编辑</a></td>
                             </tr>
                         </table>
                     </div>

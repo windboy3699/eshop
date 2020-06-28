@@ -36,10 +36,22 @@ public class GoodsCategoryController {
         List<GoodsCategory> list = goodsCategoryService.findByParentId(parentId);
 
         List<GoodsCategory> allCategoryList = goodsCategoryService.findAll();
-        Map<Integer, String> allCategory = new HashMap<>();
-        allCategory.put(0, "无");
+        Map<Integer, GoodsCategory> allCategory = new HashMap<>();
         for (GoodsCategory item : allCategoryList) {
-            allCategory.put(item.getId(), item.getName());
+            allCategory.put(item.getId(), item);
+        }
+
+        Map<Integer, String> parentsNameMap = new HashMap<>();
+        Map<Integer, Boolean> hasSonMap = new HashMap<>();
+        for (GoodsCategory item : list) {
+            parentsNameMap.put(item.getId(), getParentsName(item.getParentId(), allCategory,""));
+
+            for (GoodsCategory cate : allCategoryList) {
+                if (item.getId().equals(cate.getParentId())) {
+                    hasSonMap.put(item.getId(), true);
+                    break;
+                }
+            }
         }
 
         List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
@@ -48,11 +60,25 @@ public class GoodsCategoryController {
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
-        model.addAttribute("list", list);
-        model.addAttribute("allCategory", allCategory);
         model.addAttribute("parentId", parentId);
+        model.addAttribute("list", list);
+        model.addAttribute("parentsNameMap", parentsNameMap);
+        model.addAttribute("hasSonMap", hasSonMap);
         model.addAttribute("breadCrumbs", breadCrumbs);
+
         return "goods/category";
+    }
+
+    private String getParentsName(Integer parentId, Map<Integer, GoodsCategory> allCategory, String name) {
+        if (parentId == 0) {
+            return name;
+        }
+        if (name.length() == 0) {
+            name = allCategory.get(parentId).getName();
+        } else {
+            name = allCategory.get(parentId).getName() + " > " + name;
+        }
+        return getParentsName(allCategory.get(parentId).getParentId(), allCategory, name);
     }
 
     @RequestMapping("/goods/category/add")
@@ -67,6 +93,7 @@ public class GoodsCategoryController {
         model.addAttribute("parentId", parentId);
         model.addAttribute("sort", 100);
         model.addAttribute("breadCrumbs", breadCrumbs);
+
         return "goods/categoryEdit";
     }
 
