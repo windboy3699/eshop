@@ -34,17 +34,12 @@ public class GoodsCategoryController {
     @RequestMapping("/goods/category")
     public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer parentId) {
         List<GoodsCategory> list = goodsCategoryService.findByParentId(parentId);
-
         List<GoodsCategory> allCategoryList = goodsCategoryService.findAll();
-        Map<Integer, GoodsCategory> allCategory = new HashMap<>();
-        for (GoodsCategory item : allCategoryList) {
-            allCategory.put(item.getId(), item);
-        }
 
         Map<Integer, String> parentsNameMap = new HashMap<>();
         Map<Integer, Boolean> hasSonMap = new HashMap<>();
         for (GoodsCategory item : list) {
-            parentsNameMap.put(item.getId(), getParentsName(item.getParentId(), allCategory,""));
+            parentsNameMap.put(item.getId(), goodsCategoryService.getParentsJoinName(item.getParentId()));
 
             for (GoodsCategory cate : allCategoryList) {
                 if (item.getId().equals(cate.getParentId())) {
@@ -67,18 +62,6 @@ public class GoodsCategoryController {
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/category";
-    }
-
-    private String getParentsName(Integer parentId, Map<Integer, GoodsCategory> allCategory, String name) {
-        if (parentId == 0) {
-            return name;
-        }
-        if (name.length() == 0) {
-            name = allCategory.get(parentId).getName();
-        } else {
-            name = allCategory.get(parentId).getName() + " > " + name;
-        }
-        return getParentsName(allCategory.get(parentId).getParentId(), allCategory, name);
     }
 
     @RequestMapping("/goods/category/add")
