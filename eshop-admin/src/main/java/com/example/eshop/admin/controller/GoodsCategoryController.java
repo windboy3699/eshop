@@ -40,19 +40,9 @@ public class GoodsCategoryController {
         breadCrumbs.add(crumbs);
 
         List<GoodsCategory> list = goodsCategoryService.findByParentId(parentId);
-        List<GoodsCategory> allCategoryList = goodsCategoryService.findAll();
-
         Map<Integer, String> parentsNameMap = new HashMap<>();
-        Map<Integer, Boolean> hasSonMap = new HashMap<>();
         for (GoodsCategory item : list) {
             parentsNameMap.put(item.getId(), goodsCategoryService.getParentsJoinName(item.getParentId()));
-
-            for (GoodsCategory cate : allCategoryList) {
-                if (item.getId().equals(cate.getParentId())) {
-                    hasSonMap.put(item.getId(), true);
-                    break;
-                }
-            }
         }
 
         Integer returnParentId = null;
@@ -65,7 +55,6 @@ public class GoodsCategoryController {
         model.addAttribute("returnParentId", returnParentId);
         model.addAttribute("list", list);
         model.addAttribute("parentsNameMap", parentsNameMap);
-        model.addAttribute("hasSonMap", hasSonMap);
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/category";
@@ -102,6 +91,7 @@ public class GoodsCategoryController {
         String parentsName = category.getParentId() == 0 ? null : goodsCategoryService.getParentsJoinName(category.getParentId());
 
         model.addAttribute("category", category);
+        model.addAttribute("parentId", category.getParentId());
         model.addAttribute("parentsName", parentsName);
         model.addAttribute("breadCrumbs", breadCrumbs);
 

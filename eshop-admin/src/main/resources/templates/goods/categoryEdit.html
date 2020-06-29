@@ -10,7 +10,8 @@
             <small th:replace="common::breadCrumbs"></small>
         </h1>
         <div class="breadcrumb">
-            <a href="/admin/goods/category" class="btn btn-sm btn-default btn-flat pull-right">分类列表</a>
+            <a th:if="${parentId == 0}" href="/admin/goods/category" class="btn btn-sm btn-default btn-flat pull-right">分类列表</a>
+            <a th:if="${parentId != 0}" th:href="'/admin/goods/category?parentId='+${parentId}" class="btn btn-sm btn-default btn-flat pull-right">分类列表</a>
         </div>
     </section>
 
