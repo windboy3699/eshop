@@ -46,13 +46,11 @@ public class GoodsPropertyController {
 
         List<GoodsProperty> list = goodsPropertyService.findByCategoryId(categoryId);
         GoodsCategory goodsCategory = goodsCategoryService.findById(categoryId);
-        String categoryName = goodsCategoryService.getParentsJoinName(goodsCategory.getParentId());
-        categoryName += " > " + goodsCategory.getName();
 
         model.addAttribute("list", list);
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("categoryParentId", goodsCategory.getParentId());
-        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("categoryFullName", goodsCategoryService.getFullJoinName(categoryId));
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/property";
@@ -66,13 +64,9 @@ public class GoodsPropertyController {
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
-        GoodsCategory goodsCategory = goodsCategoryService.findById(categoryId);
-        String categoryName = goodsCategoryService.getParentsJoinName(goodsCategory.getParentId());
-        categoryName += " > " + goodsCategory.getName();
-
         model.addAttribute("property", null);
         model.addAttribute("categoryId", categoryId);
-        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("categoryFullName", goodsCategoryService.getFullJoinName(categoryId));
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/propertyEdit";
@@ -88,14 +82,10 @@ public class GoodsPropertyController {
 
         GoodsProperty property = goodsPropertyService.findById(id);
 
-        GoodsCategory goodsCategory = goodsCategoryService.findById(property.getCategoryId());
-        String categoryName = goodsCategoryService.getParentsJoinName(goodsCategory.getParentId());
-        categoryName += " > " + goodsCategory.getName();
-
         model.addAttribute("property", property);
         model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("categoryId", property.getCategoryId());
-        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("categoryFullName", goodsCategoryService.getFullJoinName(property.getCategoryId()));
 
         return "goods/propertyEdit";
     }

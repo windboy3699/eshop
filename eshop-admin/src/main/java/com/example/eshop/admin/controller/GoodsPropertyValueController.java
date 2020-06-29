@@ -1,6 +1,5 @@
 package com.example.eshop.admin.controller;
 
-import com.example.eshop.admin.domain.GoodsCategory;
 import com.example.eshop.admin.domain.GoodsProperty;
 import com.example.eshop.admin.domain.GoodsPropertyValue;
 import com.example.eshop.admin.dto.ResponseDto;
@@ -51,15 +50,12 @@ public class GoodsPropertyValueController {
 
         List<GoodsPropertyValue> list = goodsPropertyValueService.findByPropertyId(propertyId);
         GoodsProperty goodsProperty = goodsPropertyService.findById(propertyId);
-        GoodsCategory goodsCategory = goodsCategoryService.findById(goodsProperty.getCategoryId());
-        String categoryName = goodsCategoryService.getParentsJoinName(goodsCategory.getParentId());
-        categoryName += " > " + goodsCategory.getName();
 
         model.addAttribute("list", list);
         model.addAttribute("propertyId", propertyId);
         model.addAttribute("propertyName", goodsProperty.getName());
         model.addAttribute("categoryId", goodsProperty.getCategoryId());
-        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("categoryFullName", goodsCategoryService.getFullJoinName(goodsProperty.getCategoryId()));
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/propertyValue";
@@ -74,14 +70,11 @@ public class GoodsPropertyValueController {
         breadCrumbs.add(crumbs);
 
         GoodsProperty goodsProperty = goodsPropertyService.findById(propertyId);
-        GoodsCategory goodsCategory = goodsCategoryService.findById(goodsProperty.getCategoryId());
-        String categoryName = goodsCategoryService.getParentsJoinName(goodsCategory.getParentId());
-        categoryName += " > " + goodsCategory.getName();
 
         model.addAttribute("propertyValue", null);
         model.addAttribute("propertyId", propertyId);
         model.addAttribute("propertyName", goodsProperty.getName());
-        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("categoryFullName", goodsCategoryService.getFullJoinName(goodsProperty.getCategoryId()));
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/propertyValueEdit";
@@ -97,14 +90,11 @@ public class GoodsPropertyValueController {
 
         GoodsPropertyValue goodsPropertyValue = goodsPropertyValueService.findById(id);
         GoodsProperty goodsProperty = goodsPropertyService.findById(goodsPropertyValue.getPropertyId());
-        GoodsCategory goodsCategory = goodsCategoryService.findById(goodsProperty.getCategoryId());
-        String categoryName = goodsCategoryService.getParentsJoinName(goodsCategory.getParentId());
-        categoryName += " > " + goodsCategory.getName();
 
         model.addAttribute("propertyValue", goodsPropertyValue);
         model.addAttribute("propertyId", goodsProperty.getId());
         model.addAttribute("propertyName", goodsProperty.getName());
-        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("categoryFullName", goodsCategoryService.getFullJoinName(goodsProperty.getCategoryId()));
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/propertyValueEdit";

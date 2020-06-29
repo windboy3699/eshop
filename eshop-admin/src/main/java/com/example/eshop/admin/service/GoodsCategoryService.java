@@ -19,4 +19,6 @@ public interface GoodsCategoryService {
     List<Integer> getParentsIdList(Integer parentId, List<Integer> list);
 
     String getParentsJoinName(Integer parentId);
+
+    String getFullJoinName(Integer id);
 }

@@ -66,4 +66,10 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         }
         return StringUtils.join(nameList.toArray(), " > ");
     }
+
+    public String getFullJoinName(Integer id) {
+        GoodsCategory goodsCategory = findById(id);
+        String parentsJoinName = getParentsJoinName(goodsCategory.getParentId());
+        return parentsJoinName + " > " + goodsCategory.getName();
+    }
 }
