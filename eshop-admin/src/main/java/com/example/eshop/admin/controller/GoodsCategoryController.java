@@ -33,6 +33,12 @@ public class GoodsCategoryController {
 
     @RequestMapping("/goods/category")
     public String index(Model model, @RequestParam(required = false, defaultValue = "0") Integer parentId) {
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "分类管理");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+
         List<GoodsCategory> list = goodsCategoryService.findByParentId(parentId);
         List<GoodsCategory> allCategoryList = goodsCategoryService.findAll();
 
@@ -49,13 +55,14 @@ public class GoodsCategoryController {
             }
         }
 
-        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
-        Map<String, String> crumbs = new HashMap<>();
-        crumbs.put("name", "分类管理");
-        crumbs.put("link", "");
-        breadCrumbs.add(crumbs);
+        Integer returnParentId = null;
+        if (parentId > 0) {
+            GoodsCategory parentCategory = goodsCategoryService.findById(parentId);
+            returnParentId = parentCategory.getParentId();
+        }
 
         model.addAttribute("parentId", parentId);
+        model.addAttribute("returnParentId", returnParentId);
         model.addAttribute("list", list);
         model.addAttribute("parentsNameMap", parentsNameMap);
         model.addAttribute("hasSonMap", hasSonMap);
@@ -72,8 +79,11 @@ public class GoodsCategoryController {
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
+        String parentsName = parentId == 0 ? null : goodsCategoryService.getParentsJoinName(parentId);
+
         model.addAttribute("category", null);
         model.addAttribute("parentId", parentId);
+        model.addAttribute("parentsName", parentsName);
         model.addAttribute("sort", 100);
         model.addAttribute("breadCrumbs", breadCrumbs);
 
@@ -82,15 +92,17 @@ public class GoodsCategoryController {
 
     @RequestMapping("/goods/category/edit")
     public String edit(Model model, @RequestParam Integer id) {
-        GoodsCategory category = goodsCategoryService.findById(id);
-
         List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
         Map<String, String> crumbs = new HashMap<>();
         crumbs.put("name", "分类编辑");
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
+        GoodsCategory category = goodsCategoryService.findById(id);
+        String parentsName = category.getParentId() == 0 ? null : goodsCategoryService.getParentsJoinName(category.getParentId());
+
         model.addAttribute("category", category);
+        model.addAttribute("parentsName", parentsName);
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/categoryEdit";

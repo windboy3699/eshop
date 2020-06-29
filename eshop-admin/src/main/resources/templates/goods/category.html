@@ -11,6 +11,8 @@
         </h1>
         <div class="breadcrumb">
             <a th:href="'/admin/goods/category/add?parentId='+${parentId}" class="btn btn-sm btn-default btn-flat pull-right">添加分类</a>
+            <a th:if="${returnParentId != null} and ${returnParentId != 0}" th:href="'/admin/goods/category?parentId='+${returnParentId}" class="btn btn-sm btn-default btn-flat pull-right">返回上层</a>
+            <a th:if="${returnParentId != null} and ${returnParentId == 0}" th:href="'/admin/goods/category'" class="btn btn-sm btn-default btn-flat pull-right">返回上层</a>
         </div>
     </section>
     <section class="content">
