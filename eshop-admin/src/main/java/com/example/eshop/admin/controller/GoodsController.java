@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,25 +71,59 @@ public class GoodsController {
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
-        List<GoodsCategory> rootCategoryList = goodsCategoryService.findByParentId(0);
-
-        model.addAttribute("rootCategoryList", rootCategoryList);
+        model.addAttribute("categoryId", 0);
 
         return "goods/goodsEdit";
     }
 
     @RequestMapping("/goods/goods/edit")
-    public String edit(Model model) {
+    public String edit(Model model, @RequestParam Integer id) {
         List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
         Map<String, String> crumbs = new HashMap<>();
         crumbs.put("name", "商品编辑");
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
-        List<GoodsCategory> rootCategoryList = goodsCategoryService.findByParentId(0);
-
-        model.addAttribute("rootCategoryList", rootCategoryList);
+        model.addAttribute("categoryId", id);
 
         return "goods/goodsEdit";
+    }
+
+    @RequestMapping("/goods/goods/categoryMenu")
+    public String getCategoryMenu(Model model, @RequestParam Integer categoryId) {
+        List<Integer> parentsIdList = new ArrayList<>();
+        parentsIdList.add(0);
+
+        if (categoryId > 0) {
+            List<Integer> someParentsIdList = goodsCategoryService.getParentsIdList(categoryId, new ArrayList<Integer>());
+            parentsIdList.addAll(someParentsIdList);
+        }
+
+        List<List<Map<String, String>>> multiCategoryList = new ArrayList<>();
+
+        for (Integer pid : parentsIdList) {
+            List<GoodsCategory> categoryList = goodsCategoryService.findByParentId(pid);
+            if (categoryList.isEmpty()) {
+                continue;
+            }
+            List<Map<String, String>> mapList = new ArrayList<>();
+            for (GoodsCategory cate : categoryList) {
+                Map<String, String> map = new HashMap<>();
+                map.put("id", String.valueOf(cate.getId()));
+                map.put("name", cate.getName());
+                mapList.add(map);
+            }
+            multiCategoryList.add(mapList);
+        }
+
+        List<String> selectIdList = new ArrayList<>();
+        for (Integer i : parentsIdList) {
+            selectIdList.add(String.valueOf(i));
+        }
+
+        model.addAttribute("multiCategoryList", multiCategoryList);
+        model.addAttribute("selectIdList", selectIdList);
+
+        return "goods/goodsCategoryMenu";
     }
 }
