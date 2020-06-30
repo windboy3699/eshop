@@ -1,6 +1,7 @@
 package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.domain.Goods;
+import com.example.eshop.admin.domain.GoodsCategory;
 import com.example.eshop.admin.service.GoodsCategoryService;
 import com.example.eshop.admin.service.GoodsService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
@@ -59,5 +60,35 @@ public class GoodsController {
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/goods";
+    }
+
+    @RequestMapping("/goods/goods/add")
+    public String add(Model model) {
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "商品添加");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+
+        List<GoodsCategory> rootCategoryList = goodsCategoryService.findByParentId(0);
+
+        model.addAttribute("rootCategoryList", rootCategoryList);
+
+        return "goods/goodsEdit";
+    }
+
+    @RequestMapping("/goods/goods/edit")
+    public String edit(Model model) {
+        List<Map<String, String>> breadCrumbs = getBaseBreadCrumbs();
+        Map<String, String> crumbs = new HashMap<>();
+        crumbs.put("name", "商品编辑");
+        crumbs.put("link", "");
+        breadCrumbs.add(crumbs);
+
+        List<GoodsCategory> rootCategoryList = goodsCategoryService.findByParentId(0);
+
+        model.addAttribute("rootCategoryList", rootCategoryList);
+
+        return "goods/goodsEdit";
     }
 }
