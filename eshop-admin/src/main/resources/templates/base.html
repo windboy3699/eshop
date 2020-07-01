@@ -12,10 +12,12 @@
     <!-- PanXd
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.css">
     -->
+    <link rel="stylesheet" th:href="${staticBaseUrl}+'/app/css/font-awesome.css'">
     <!-- Ionicons -->
     <!-- PanXd
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.css">
     -->
+    <link rel="stylesheet" th:href="${staticBaseUrl}+'/app/css/ionicons.css'">
     <!-- Theme style -->
     <link rel="stylesheet" th:href="${staticBaseUrl}+'/dist/css/AdminLTE.css'">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -123,17 +125,18 @@
 <!-- PanXd
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 -->
+<script th:src="${staticBaseUrl}+'/app/js/jquery-ui.min.js'"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-    //PanXd $.widget.bridge('uibutton', $.ui.button);
+    $.widget.bridge('uibutton', $.ui.button);
 </script>
 <!-- Bootstrap 3.3.6 -->
 <script th:src="${staticBaseUrl}+'/bootstrap/js/bootstrap.min.js'"></script>
 <script th:src="${staticBaseUrl}+'/plugins/iCheck/icheck.min.js'"></script>
 <!-- AdminLTE App -->
 <script th:src="${staticBaseUrl}+'/dist/js/app.min.js'"></script>
-<script th:src="${staticBaseUrl}+'/app/utils.js'"></script>
-<script th:src="${staticBaseUrl}+'/app/public.js'"></script>
+<script th:src="${staticBaseUrl}+'/app/js/utils.js'"></script>
+<script th:src="${staticBaseUrl}+'/app/js/public.js'"></script>
 <script type="text/javascript" layout:fragment="js"></script>
 </body>
 </html>
