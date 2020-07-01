@@ -23,4 +23,8 @@ public class GoodsServiceImpl implements GoodsService {
         Optional<Goods> item = goodsDao.findById(id);
         return item.get();
     }
+
+    public Goods save(Goods goods) {
+        return goodsDao.save(goods);
+    }
 }

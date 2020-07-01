@@ -8,4 +8,6 @@ public interface GoodsService {
     Page<Goods> findAll(Pageable pageable);
 
     Goods findById(Integer id);
+
+    Goods save(Goods goods);
 }

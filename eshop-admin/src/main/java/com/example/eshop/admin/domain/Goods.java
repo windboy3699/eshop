@@ -1,9 +1,11 @@
 package com.example.eshop.admin.domain;
 
+import com.example.eshop.admin.util.DbJoinStringConverterUtil;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name="goods")
 @Entity
@@ -16,7 +18,8 @@ public class Goods {
     private String name;
     private String clusterCode;
     private Integer categoryId;
-    private String properties;
+    @Convert(converter= DbJoinStringConverterUtil.class)
+    private List<Integer> properties;
     private Double price;
     private Integer stock;
     private String image;
@@ -38,9 +41,9 @@ public class Goods {
 
     public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
 
-    public String getProperties() { return properties; }
+    public List<Integer> getProperties() { return properties; }
 
-    public void setProperties(String properties) { this.properties = properties; }
+    public void setProperties(List<Integer> properties) { this.properties = properties; }
 
     public Double getPrice() { return price; }
 

@@ -4,11 +4,14 @@ import com.example.eshop.admin.domain.Goods;
 import com.example.eshop.admin.domain.GoodsCategory;
 import com.example.eshop.admin.domain.GoodsProperty;
 import com.example.eshop.admin.domain.GoodsPropertyValue;
+import com.example.eshop.admin.dto.ResponseDto;
+import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.GoodsCategoryService;
 import com.example.eshop.admin.service.GoodsPropertyService;
 import com.example.eshop.admin.service.GoodsPropertyValueService;
 import com.example.eshop.admin.service.GoodsService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -65,17 +70,16 @@ public class GoodsController {
         Map<Integer, String> allPropertyValueName = goodsPropertyValueService.getAllNameMap();
         Map<Integer, String> goodsPropertyValueMap = new HashMap<>();
         for (Goods item : list) {
-            if (item.getProperties().length() == 0) {
+            if (item.getProperties().isEmpty()) {
                 goodsPropertyValueMap.put(item.getId(), "");
                 continue;
             }
-            List<String> splitString = Arrays.asList(item.getProperties().split("_"));
             String names = "";
-            for (String str : splitString) {
+            for (Integer propId : item.getProperties()) {
                 if (names.length() == 0) {
-                    names += allPropertyValueName.get(Integer.valueOf(str));
+                    names += allPropertyValueName.get(propId);
                 } else {
-                    names += "," + allPropertyValueName.get(Integer.valueOf(str));
+                    names += "," + allPropertyValueName.get(propId);
                 }
             }
             goodsPropertyValueMap.put(item.getId(), names);
@@ -116,7 +120,7 @@ public class GoodsController {
 
         model.addAttribute("goods", goods);
         model.addAttribute("categoryId", goods.getCategoryId());
-        model.addAttribute("properties", goods.getProperties());
+        model.addAttribute("properties", StringUtils.join(goods.getProperties(), "_"));
         model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/goodsEdit";
@@ -179,5 +183,23 @@ public class GoodsController {
         model.addAttribute("propertyIdList", propertyIdList);
 
         return "goods/selectCategoryAndProperty";
+    }
+
+    @RequestMapping("/goods/goods/save")
+    @ResponseBody
+    public ResponseDto<Object> save(Goods goods, @RequestParam String introduction) {
+        if (goods.getCategoryId() == null || goods.getPrice() == null || goods.getStock() == null) {
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+        }
+        if (goods.getName().length() == 0 || goods.getImage().length() == 0 || introduction.length() == 0) {
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+        }
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = df.format(new Date());
+        goods.setCreated(time);
+        goodsService.save(goods);
+
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
 }
