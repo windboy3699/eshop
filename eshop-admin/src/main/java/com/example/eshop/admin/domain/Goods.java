@@ -16,7 +16,7 @@ public class Goods {
     private String name;
     private String clusterCode;
     private Integer categoryId;
-    private String property;
+    private String properties;
     private Double price;
     private Integer stock;
     private String image;
@@ -38,9 +38,9 @@ public class Goods {
 
     public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
 
-    public String getProperty() { return property; }
+    public String getProperties() { return properties; }
 
-    public void setProperty(String property) { this.property = property; }
+    public void setProperties(String properties) { this.properties = properties; }
 
     public Double getPrice() { return price; }
 

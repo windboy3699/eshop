@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface GoodsService {
     Page<Goods> findAll(Pageable pageable);
+
+    Goods findById(Integer id);
 }

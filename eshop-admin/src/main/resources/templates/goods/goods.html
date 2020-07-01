@@ -36,7 +36,7 @@
                                 <td th:text="${item.id}"></td>
                                 <td th:text="${#strings.abbreviate(item.name, 30)}"></td>
                                 <td th:text="${allCategoryMap[item.categoryId].name}"></td>
-                                <td th:text="${item.property}"></td>
+                                <td th:text="${goodsPropertyValueMap[item.id]}"></td>
                                 <td th:text="${item.price}"></td>
                                 <td th:text="${item.stock}"></td>
                                 <td th:text="${item.created}"></td>

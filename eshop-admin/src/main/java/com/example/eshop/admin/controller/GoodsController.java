@@ -19,10 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -65,8 +62,28 @@ public class GoodsController {
         List<Goods> list = pageGoods.getContent();
         Map<String, Object> paginator = paginatorServiceImpl.paging(pageGoods.getTotalElements());
 
+        Map<Integer, String> allPropertyValueName = goodsPropertyValueService.getAllNameMap();
+        Map<Integer, String> goodsPropertyValueMap = new HashMap<>();
+        for (Goods item : list) {
+            if (item.getProperties().length() == 0) {
+                goodsPropertyValueMap.put(item.getId(), "");
+                continue;
+            }
+            List<String> splitString = Arrays.asList(item.getProperties().split("_"));
+            String names = "";
+            for (String str : splitString) {
+                if (names.length() == 0) {
+                    names += allPropertyValueName.get(Integer.valueOf(str));
+                } else {
+                    names += "," + allPropertyValueName.get(Integer.valueOf(str));
+                }
+            }
+            goodsPropertyValueMap.put(item.getId(), names);
+        }
+
         model.addAttribute("list", list);
         model.addAttribute("allCategoryMap", goodsCategoryService.getAllCategoryMap());
+        model.addAttribute("goodsPropertyValueMap", goodsPropertyValueMap);
         model.addAttribute("paginator", paginator);
         model.addAttribute("breadCrumbs", breadCrumbs);
 
@@ -82,6 +99,7 @@ public class GoodsController {
         breadCrumbs.add(crumbs);
 
         model.addAttribute("categoryId", 0);
+        model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/goodsEdit";
     }
@@ -94,13 +112,18 @@ public class GoodsController {
         crumbs.put("link", "");
         breadCrumbs.add(crumbs);
 
-        model.addAttribute("categoryId", id);
+        Goods goods = goodsService.findById(id);
+
+        model.addAttribute("goods", goods);
+        model.addAttribute("categoryId", goods.getCategoryId());
+        model.addAttribute("properties", goods.getProperties());
+        model.addAttribute("breadCrumbs", breadCrumbs);
 
         return "goods/goodsEdit";
     }
 
     @RequestMapping("/goods/goods/selectCategoryAndProperty")
-    public String getCategoryMenu(Model model, @RequestParam Integer categoryId) {
+    public String selectCategoryAndProperty(Model model, @RequestParam Integer categoryId, @RequestParam(required = false, defaultValue = "") String properties) {
         List<Integer> parentsIdList = new ArrayList<>();
         parentsIdList.add(0);
         if (categoryId > 0) {
@@ -123,9 +146,9 @@ public class GoodsController {
             }
             categoryListGroup.add(mapList);
         }
-        List<String> selectedId = new ArrayList<>();
+        List<String> selectedIdList = new ArrayList<>();
         for (Integer i : parentsIdList) {
-            selectedId.add(String.valueOf(i));
+            selectedIdList.add(String.valueOf(i));
         }
 
         Map<Integer, String> propertyNameMap = new HashMap<>();
@@ -141,10 +164,19 @@ public class GoodsController {
             }
         }
 
+        List<Integer> propertyIdList = new ArrayList<>();
+        if (properties != null && properties.length() != 0) {
+            List<String> splitString = Arrays.asList(properties.split("_"));
+            for (String str : splitString) {
+                propertyIdList.add(Integer.valueOf(str));
+            }
+        }
+
         model.addAttribute("categoryListGroup", categoryListGroup);
-        model.addAttribute("selectedId", selectedId);
+        model.addAttribute("selectedIdList", selectedIdList);
         model.addAttribute("goodsPropertyValueListGroup", goodsPropertyValueListGroup);
         model.addAttribute("propertyNameMap", propertyNameMap);
+        model.addAttribute("propertyIdList", propertyIdList);
 
         return "goods/selectCategoryAndProperty";
     }

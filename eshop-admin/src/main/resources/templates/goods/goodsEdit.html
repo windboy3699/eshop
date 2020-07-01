@@ -72,16 +72,21 @@
 <script type="text/javascript" layout:fragment="js">
     $(document).ready(function (){
         var categoryId = [[${categoryId}]];
-        $.get("/admin/goods/goods/selectCategoryAndProperty?categoryId="+categoryId, function (data, status) {
+        var properties = "[[${properties} ? ${properties} : '']]";
+        var url ="/admin/goods/goods/selectCategoryAndProperty?categoryId="+categoryId;
+        if (properties != "") {
+            url += "&properties="+properties;
+        }
+        $.get(url, function (data, status) {
             $("#category-property").html(data);
             selectChange();
         });
     });
     function selectChange() {
         $(".category-select").change(function () {
-            var id = $(this).val();
-            if (id != "") {
-                $.get("/admin/goods/goods/selectCategoryAndProperty?categoryId=" + $(this).val(), function (data, status) {
+            var catId = $(this).val();
+            if (catId != "") {
+                $.get("/admin/goods/goods/selectCategoryAndProperty?categoryId=" + catId, function (data, status) {
                     $("#category-property").html(data);
                     selectChange();
                 });

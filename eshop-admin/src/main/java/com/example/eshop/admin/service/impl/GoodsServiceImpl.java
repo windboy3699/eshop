@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
@@ -15,5 +17,10 @@ public class GoodsServiceImpl implements GoodsService {
 
     public Page<Goods> findAll(Pageable pageable) {
         return goodsDao.findAll(pageable);
+    }
+
+    public Goods findById(Integer id) {
+        Optional<Goods> item = goodsDao.findById(id);
+        return item.get();
     }
 }
