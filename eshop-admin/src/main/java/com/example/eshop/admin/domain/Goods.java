@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Table(name="goods")
@@ -15,14 +16,30 @@ public class Goods {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank
     private String name;
+
     private String clusterCode;
+
+    @NotNull
+    @Min(1)
     private Integer categoryId;
+
     @Convert(converter= DbJoinStringConverterUtil.class)
     private List<Integer> properties;
+
+    @NotNull
+    @Min(1)
     private Double price;
+
+    @NotNull
+    @Min(1)
     private Integer stock;
+
+    @NotBlank
     private String image;
+
     private String created;
 
     public Integer getId() { return id; }

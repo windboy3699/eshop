@@ -19,10 +19,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -134,7 +137,6 @@ public class GoodsController {
             List<Integer> someParentsIdList = goodsCategoryService.getParentsIdList(categoryId, new ArrayList<Integer>());
             parentsIdList.addAll(someParentsIdList);
         }
-
         List<List<Map<String, String>>> categoryListGroup = new ArrayList<>();
         for (Integer pid : parentsIdList) {
             List<GoodsCategory> categoryList = goodsCategoryService.findByParentId(pid);
@@ -154,7 +156,6 @@ public class GoodsController {
         for (Integer i : parentsIdList) {
             selectedIdList.add(String.valueOf(i));
         }
-
         Map<Integer, String> propertyNameMap = new HashMap<>();
         List<List<GoodsPropertyValue>> goodsPropertyValueListGroup = new ArrayList<>();
         if (categoryId > 0) {
@@ -167,7 +168,6 @@ public class GoodsController {
                 }
             }
         }
-
         List<Integer> propertyIdList = new ArrayList<>();
         if (properties != null && properties.length() != 0) {
             List<String> splitString = Arrays.asList(properties.split("_"));
@@ -187,14 +187,12 @@ public class GoodsController {
 
     @RequestMapping("/goods/goods/save")
     @ResponseBody
-    public ResponseDto<Object> save(Goods goods, @RequestParam String introduction) {
-        if (goods.getCategoryId() == null || goods.getPrice() == null || goods.getStock() == null) {
-            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
+    public ResponseDto<Object> save(@Valid Goods goods, BindingResult bindResult, @RequestParam String introduction) {
+        if (bindResult.hasErrors()) {
+            FieldError firstError = bindResult.getFieldErrors().get(0);
+            String message = firstError.getField() + firstError.getDefaultMessage();
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), message);
         }
-        if (goods.getName().length() == 0 || goods.getImage().length() == 0) {
-            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
-        }
-
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time = df.format(new Date());
         goods.setCreated(time);
