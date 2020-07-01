@@ -1,4 +1,0 @@
-<select th:each="catlist:${multiCategoryList}" name="categoryId[]" class="form-control category-select" style="width: 160px; float:left; margin-right: 10px;">
-    <option value="">请选择</option>
-    <option th:each="cat:${catlist}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${#lists.contains(selectIdList, cat.id) ? true : false}"></option>
-</select>
