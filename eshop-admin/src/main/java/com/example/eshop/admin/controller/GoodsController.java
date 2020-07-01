@@ -191,7 +191,7 @@ public class GoodsController {
         if (goods.getCategoryId() == null || goods.getPrice() == null || goods.getStock() == null) {
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
-        if (goods.getName().length() == 0 || goods.getImage().length() == 0 || introduction.length() == 0) {
+        if (goods.getName().length() == 0 || goods.getImage().length() == 0) {
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
 

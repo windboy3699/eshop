@@ -3,6 +3,7 @@ package com.example.eshop.admin.service.impl;
 import com.example.eshop.admin.dao.GoodsDao;
 import com.example.eshop.admin.domain.Goods;
 import com.example.eshop.admin.service.GoodsService;
+import com.example.eshop.admin.util.ReflectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     public Goods save(Goods goods) {
+        if (goods.getId() != null) {
+            Goods origin = findById(goods.getId());
+            ReflectionUtil.copyNotNullProperties(goods, origin);
+            return goodsDao.save(origin);
+        }
         return goodsDao.save(goods);
     }
 }
