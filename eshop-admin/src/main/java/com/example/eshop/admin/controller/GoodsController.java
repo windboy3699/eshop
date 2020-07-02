@@ -129,6 +129,22 @@ public class GoodsController {
         return "goods/goodsEdit";
     }
 
+    @RequestMapping("/goods/goods/save")
+    @ResponseBody
+    public ResponseDto<Object> save(@Valid Goods goods, BindingResult bindResult, @RequestParam String introduction) {
+        if (bindResult.hasErrors()) {
+            FieldError firstError = bindResult.getFieldErrors().get(0);
+            String message = firstError.getField() + firstError.getDefaultMessage();
+            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), message);
+        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = df.format(new Date());
+        goods.setCreated(time);
+        goodsService.save(goods);
+
+        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
+    }
+
     @RequestMapping("/goods/goods/selectCategoryAndProperty")
     public String selectCategoryAndProperty(Model model, @RequestParam Integer categoryId, @RequestParam(required = false, defaultValue = "") String properties) {
         List<Integer> parentsIdList = new ArrayList<>();
@@ -156,10 +172,11 @@ public class GoodsController {
         for (Integer i : parentsIdList) {
             selectedIdList.add(String.valueOf(i));
         }
+        //获取分类的属性
         Map<Integer, String> propertyNameMap = new HashMap<>();
         List<List<GoodsPropertyValue>> goodsPropertyValueListGroup = new ArrayList<>();
         if (categoryId > 0) {
-            List<GoodsProperty> goodsPropertyList = goodsPropertyService.findByCategoryId(categoryId);
+            List<GoodsProperty> goodsPropertyList = getCategoryPropertyList(categoryId);
             for (GoodsProperty goodsProperty : goodsPropertyList) {
                 propertyNameMap.put(goodsProperty.getId(), goodsProperty.getName());
                 List<GoodsPropertyValue> goodsPropertyValueList = goodsPropertyValueService.findByPropertyId(goodsProperty.getId());
@@ -168,6 +185,7 @@ public class GoodsController {
                 }
             }
         }
+        //从商品的properties字段中分割出propertyId-List
         List<Integer> propertyIdList = new ArrayList<>();
         if (properties != null && properties.length() != 0) {
             List<String> splitString = Arrays.asList(properties.split("_"));
@@ -185,19 +203,15 @@ public class GoodsController {
         return "goods/selectCategoryAndProperty";
     }
 
-    @RequestMapping("/goods/goods/save")
-    @ResponseBody
-    public ResponseDto<Object> save(@Valid Goods goods, BindingResult bindResult, @RequestParam String introduction) {
-        if (bindResult.hasErrors()) {
-            FieldError firstError = bindResult.getFieldErrors().get(0);
-            String message = firstError.getField() + firstError.getDefaultMessage();
-            return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), message);
+    private List<GoodsProperty> getCategoryPropertyList(Integer categoryId) {
+        if (categoryId == 0) {
+            return new ArrayList<>();
         }
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = df.format(new Date());
-        goods.setCreated(time);
-        goodsService.save(goods);
-
-        return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
+        List<GoodsProperty> goodsPropertyList = goodsPropertyService.findByCategoryId(categoryId);
+        if (!goodsPropertyList.isEmpty()) {
+            return goodsPropertyList;
+        }
+        GoodsCategory category = goodsCategoryService.findById(categoryId);
+        return getCategoryPropertyList(category.getParentId());
     }
 }

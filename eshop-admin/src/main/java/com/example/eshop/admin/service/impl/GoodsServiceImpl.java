@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -28,6 +29,12 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods save(Goods goods) {
         if (goods.getId() != null) {
             Goods origin = findById(goods.getId());
+            //分类ID改变后，如果没传属性值，原属性值置空
+            if (goods.getCategoryId() != origin.getCategoryId()) {
+                if (goods.getProperties() == null || goods.getProperties().isEmpty()) {
+                    origin.setProperties(new ArrayList<>());
+                }
+            }
             ReflectionUtil.copyNotNullProperties(goods, origin);
             return goodsDao.save(origin);
         }
