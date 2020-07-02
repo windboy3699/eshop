@@ -17,12 +17,12 @@ public class Goods {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotBlank //NotBlank会删除空格后判断，NotNull空格字符串也能通过验证
     private String name;
 
     private String clusterCode;
 
-    @NotNull
+    @NotNull //Int类型的字段，如果该字段传来是空字符串或者没有这个字段接收到的都是Null
     @Min(1)
     private Integer categoryId;
 

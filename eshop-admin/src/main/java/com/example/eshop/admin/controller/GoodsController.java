@@ -137,9 +137,11 @@ public class GoodsController {
             String message = firstError.getField() + firstError.getDefaultMessage();
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), message);
         }
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = df.format(new Date());
-        goods.setCreated(time);
+        if (goods.getId() == null) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = df.format(new Date());
+            goods.setCreated(time);
+        }
         goodsService.save(goods);
 
         return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
