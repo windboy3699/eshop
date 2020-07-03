@@ -59,7 +59,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">介绍</label>
                                 <div class="col-sm-10">
-                                    <textarea name="introduction" id="editor">
+                                    <textarea name="introduction" id="editor" th:text="${introduction} ? ${introduction} : ''">
                                     </textarea>
                                 </div>
                             </div>

@@ -1,15 +1,9 @@
 package com.example.eshop.admin.controller;
 
-import com.example.eshop.admin.domain.Goods;
-import com.example.eshop.admin.domain.GoodsCategory;
-import com.example.eshop.admin.domain.GoodsProperty;
-import com.example.eshop.admin.domain.GoodsPropertyValue;
+import com.example.eshop.admin.domain.*;
 import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
-import com.example.eshop.admin.service.GoodsCategoryService;
-import com.example.eshop.admin.service.GoodsPropertyService;
-import com.example.eshop.admin.service.GoodsPropertyValueService;
-import com.example.eshop.admin.service.GoodsService;
+import com.example.eshop.admin.service.*;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +28,9 @@ import java.util.*;
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private GoodsIntroductionService goodsIntroductionService;
 
     @Autowired
     private GoodsCategoryService goodsCategoryService;
@@ -120,8 +117,10 @@ public class GoodsController {
         breadCrumbs.add(crumbs);
 
         Goods goods = goodsService.findById(id);
+        GoodsIntroduction goodsIntroduction = goodsIntroductionService.findById(id);
 
         model.addAttribute("goods", goods);
+        model.addAttribute("introduction", goodsIntroduction.getIntroduction());
         model.addAttribute("categoryId", goods.getCategoryId());
         model.addAttribute("properties", StringUtils.join(goods.getProperties(), "_"));
         model.addAttribute("breadCrumbs", breadCrumbs);
@@ -143,6 +142,11 @@ public class GoodsController {
             goods.setCreated(time);
         }
         goodsService.save(goods);
+
+        GoodsIntroduction goodsIntroduction = new GoodsIntroduction();
+        goodsIntroduction.setId(goods.getId());
+        goodsIntroduction.setIntroduction(introduction);
+        goodsIntroductionService.save(goodsIntroduction);
 
         return ResponseDto.create(ErrorCodeEnum.SUCCESS.getCode(), ErrorCodeEnum.SUCCESS.getMessage());
     }
