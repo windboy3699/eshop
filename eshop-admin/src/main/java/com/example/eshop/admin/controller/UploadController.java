@@ -1,6 +1,6 @@
 package com.example.eshop.admin.controller;
 
-import com.example.eshop.admin.dto.ResponseDto;
+import com.example.eshop.admin.dto.CKEditorResultDto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,28 +72,32 @@ public class UploadController {
     }
 
     /**
-     * CkEditor图片上传
+     * CKEditor图片上传
      * @param multipartFile
      * @return
      * @throws IOException
      */
     @ResponseBody
-    @RequestMapping(value = "/admin/upload/forCkEditor", method = RequestMethod.POST)
-    public ResponseDto<Object> uploadForCKEditor(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    @RequestMapping(value = "/admin/upload/forCKEditor", method = RequestMethod.POST)
+    public CKEditorResultDto uploadForCKEditor(@RequestParam("upload") MultipartFile multipartFile) throws IOException {
+        CKEditorResultDto resultDto = new CKEditorResultDto();
+        resultDto.setUploaded(0);
         if (multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
-            return ResponseDto.create(10001, "图片不能为空");
+            return resultDto;
         }
         String contentType = multipartFile.getContentType();
         if (!contentTypeList.contains(contentType)) {
-            return ResponseDto.create(10002, "图片格式错误");
+            return resultDto;
         }
         String datePath = getDatePath();
         String fileName = saveImage(multipartFile, imageSavePath + datePath);
         if (StringUtils.isNotBlank(fileName)) {
             String imageUrl = imageDomainUrl + datePath + separator + fileName;
-            return ResponseDto.create(0, "success", imageUrl);
+            resultDto.setUploaded(1);
+            resultDto.setUrl(imageUrl);
+            return resultDto;
         }
-        return ResponseDto.create(10003, "上传失败");
+        return resultDto;
     }
 
     private String getDatePath() {
@@ -110,7 +114,9 @@ public class UploadController {
             filePath.mkdirs();
         }
         FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
-        String fileName = System.currentTimeMillis() + ".jpg";
+        String originName = multipartFile.getOriginalFilename();
+        List<String> sepNameList = Arrays.asList(originName.split("\\."));
+        String fileName = System.currentTimeMillis() + "." + sepNameList.get(1);
         String fullFileName = path + File.separator + fileName;
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fullFileName));
         byte[] bs = new byte[1024];
