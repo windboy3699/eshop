@@ -45,7 +45,7 @@ public class UploadController {
     @ResponseBody
     @RequestMapping(value = "/admin/upload", method = RequestMethod.POST)
     public String doUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        String content = "<script type=\"text/javascript\">document.domain = \"localhost\";";
+        String content = "<script type=\"text/javascript\">document.domain = \"eshop.com\";";
 
         if (multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
             content += "alert(\"图片不能为空\");";

@@ -1,4 +1,4 @@
-package com.example.eshop.webservice;
+package com.example.eshop.web;
 
 import com.example.eshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

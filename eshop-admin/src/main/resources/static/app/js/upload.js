@@ -1,6 +1,6 @@
-document.domain = 'localhost';
+document.domain = 'eshop.com';
 
-var uploadUrl = "http://localhost:8080/admin/upload";
+var uploadUrl = "http://www.eshop.com/admin/upload";
 var iframeWrapper;
 var clickInput;
 
