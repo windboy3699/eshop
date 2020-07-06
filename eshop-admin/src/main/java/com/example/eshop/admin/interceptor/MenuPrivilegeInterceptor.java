@@ -6,6 +6,7 @@ import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemMenuService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -51,7 +52,7 @@ public class MenuPrivilegeInterceptor implements HandlerInterceptor {
         }
         String uri = request.getRequestURI();
         for (SystemMenu item : menuInfoList) {
-            if (item.getPath() != null && item.getPath().length() != 0 && uri.indexOf(item.getPath()) != -1) {
+            if (StringUtils.isNotBlank(item.getPath()) && uri.indexOf(item.getPath()) != -1) {
                 return true;
             }
         }

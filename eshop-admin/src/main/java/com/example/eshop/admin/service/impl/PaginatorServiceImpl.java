@@ -1,5 +1,6 @@
 package com.example.eshop.admin.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -32,7 +33,7 @@ public class PaginatorServiceImpl {
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String paramPageNum = request.getParameter(pageName);
-        if (paramPageNum == null || paramPageNum.length() == 0) {
+        if (StringUtils.isBlank(paramPageNum)) {
             pageNum = 1;
         } else {
             if (paramPageNum.matches("[0-9]+")) {
@@ -50,7 +51,7 @@ public class PaginatorServiceImpl {
         String queryString = request.getQueryString();
 
         List<String> queryStringList = new ArrayList<>();
-        if (queryString != null && queryString.length() != 0) {
+        if (StringUtils.isNotBlank(queryString)) {
             String[] queryStringArray = queryString.split("&");
             queryStringList = new ArrayList<>(queryStringArray.length);
             Collections.addAll(queryStringList, queryStringArray);

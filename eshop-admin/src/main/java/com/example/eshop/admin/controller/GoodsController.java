@@ -193,7 +193,7 @@ public class GoodsController {
         }
         //从商品的properties字段中分割出propertyId-List
         List<Integer> propertyIdList = new ArrayList<>();
-        if (properties != null && properties.length() != 0) {
+        if (StringUtils.isNotBlank(properties)) {
             List<String> splitString = Arrays.asList(properties.split("_"));
             for (String str : splitString) {
                 propertyIdList.add(Integer.valueOf(str));

@@ -4,6 +4,7 @@ import com.example.eshop.admin.domain.GoodsCategory;
 import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.GoodsCategoryService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,7 +102,7 @@ public class GoodsCategoryController {
     @RequestMapping("/goods/category/save")
     @ResponseBody
     public ResponseDto<Object> save(GoodsCategory category) {
-        if (category.getName() == null || category.getName().length() == 0) {
+        if (StringUtils.isBlank(category.getName())) {
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         goodsCategoryService.save(category);

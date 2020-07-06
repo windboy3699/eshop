@@ -5,6 +5,7 @@ import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.SystemMenuService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -105,7 +106,7 @@ public class SystemMenuController {
     @RequestMapping("/system/menu/save")
     @ResponseBody
     public ResponseDto<Object> save(SystemMenu menu) {
-        if (menu.getName() == null || menu.getName().length() == 0) {
+        if (StringUtils.isBlank(menu.getName())) {
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         if (menu.getTopid() == 0) {

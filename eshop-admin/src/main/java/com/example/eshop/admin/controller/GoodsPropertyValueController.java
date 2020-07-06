@@ -7,6 +7,7 @@ import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.GoodsCategoryService;
 import com.example.eshop.admin.service.GoodsPropertyService;
 import com.example.eshop.admin.service.GoodsPropertyValueService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -103,7 +104,7 @@ public class GoodsPropertyValueController {
     @RequestMapping("/goods/category/property/value/save")
     @ResponseBody
     public ResponseDto<Object> save(GoodsPropertyValue goodsPropertyValue) {
-        if (goodsPropertyValue.getName() == null || goodsPropertyValue.getName().length() == 0) {
+        if (StringUtils.isBlank(goodsPropertyValue.getName())) {
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         goodsPropertyValueService.save(goodsPropertyValue);

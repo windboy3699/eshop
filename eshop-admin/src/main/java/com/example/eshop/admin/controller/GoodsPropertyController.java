@@ -6,6 +6,7 @@ import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.GoodsCategoryService;
 import com.example.eshop.admin.service.GoodsPropertyService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -93,7 +94,7 @@ public class GoodsPropertyController {
     @RequestMapping("/goods/category/property/save")
     @ResponseBody
     public ResponseDto<Object> save(GoodsProperty property) {
-        if (property.getName() == null || property.getName().length() == 0) {
+        if (StringUtils.isBlank(property.getName())) {
             return ResponseDto.create(ErrorCodeEnum.MISSING_PARAM.getCode(), ErrorCodeEnum.MISSING_PARAM.getMessage());
         }
         goodsPropertyService.save(property);

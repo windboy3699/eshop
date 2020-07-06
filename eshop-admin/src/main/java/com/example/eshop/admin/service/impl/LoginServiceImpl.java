@@ -9,6 +9,7 @@ import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.util.CookieUtil;
 import com.example.eshop.admin.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -90,7 +91,7 @@ public class LoginServiceImpl implements LoginService {
             return null;
         }
         String tokenValue = stringRedisTemplate.opsForValue().get(systemToken);
-        if (tokenValue == null || tokenValue.length() == 0) {
+        if (StringUtils.isBlank(tokenValue)) {
             return null;
         }
         TokenInfoDto tokenInfoDto = (TokenInfoDto) JsonUtil.toObject(tokenValue, TokenInfoDto.class);

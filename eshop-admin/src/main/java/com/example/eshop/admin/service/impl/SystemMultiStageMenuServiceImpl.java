@@ -6,6 +6,7 @@ import com.example.eshop.admin.dto.SystemMenuDto;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemMultiStageMenuService;
 import com.example.eshop.admin.service.SystemMenuService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -105,7 +106,7 @@ public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuServ
                 systemMenuDto.setName(item.getName());
                 systemMenuDto.setTopid(item.getTopid());
                 systemMenuDto.setLink(item.getLink());
-                if (item.getPath() != null && item.getPath().length() != 0 && uri.indexOf(item.getPath()) != -1) {
+                if (StringUtils.isNotBlank(item.getPath()) && uri.indexOf(item.getPath()) != -1) {
                     systemMenuDto.setActive(true);
                     activeIdList.add(item.getId());
                     SystemMenu level2Menu = mappedAllMenu.get(item.getTopid());
