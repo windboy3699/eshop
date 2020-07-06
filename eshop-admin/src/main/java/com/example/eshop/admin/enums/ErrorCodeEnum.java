@@ -4,7 +4,7 @@ public enum ErrorCodeEnum {
     SUCCESS(0, "执行成功"),
 
     /**
-     * code:X0000不推荐使用，请使用有具体含义的子参数
+     * code:X0000相当于interface不具体不推荐使用，请使用有具体含义的子参数
      */
     PARAM_ERROR(10000, "参数错误"),
     MISSING_PARAM(10100, "缺少参数"),
@@ -20,6 +20,7 @@ public enum ErrorCodeEnum {
     BIZ_ERROR(50000, "业务逻辑错误"),
     SERVER_ERROR(70000, "服务器错误"),
 
+    EXCEPTION_ERROR(90700, "异常错误"),
     FAILURE(90900, "执行失败");
 
     private Integer code;

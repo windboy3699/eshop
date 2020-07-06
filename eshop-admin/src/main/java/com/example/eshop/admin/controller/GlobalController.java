@@ -1,13 +1,15 @@
 package com.example.eshop.admin.controller;
 
+import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.dto.SystemMenuDto;
 import com.example.eshop.admin.dto.TokenInfoDto;
+import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemMultiStageMenuService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -23,6 +25,20 @@ public class GlobalController {
 
     @Autowired
     private SystemMultiStageMenuService systemMultiStageMenuService;
+
+    /**
+     * 统一异常处理
+     * @param request
+     * @param e
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseDto<Object> defaultErrorHandler(HttpServletRequest request, Exception e) throws Exception {
+        return ResponseDto.create(ErrorCodeEnum.EXCEPTION_ERROR.getCode(), e.getMessage());
+    }
 
     @ModelAttribute(name = "staticBaseUrl")
     public String staticBaseUrl() {
