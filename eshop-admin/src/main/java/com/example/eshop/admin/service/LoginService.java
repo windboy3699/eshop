@@ -1,10 +1,10 @@
 package com.example.eshop.admin.service;
 
-import com.example.eshop.admin.dto.TokenInfoDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.eshop.admin.exception.TokenInvalidException;
 
 public interface LoginService {
-    Boolean doLogin(String username, String password);
+    String doLogin(String username, String password);
 
-    TokenInfoDto checkLogin() throws JsonProcessingException;
+    DecodedJWT checkLogin(String token) throws TokenInvalidException;
 }

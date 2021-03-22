@@ -1,11 +1,13 @@
 package com.example.eshop.admin.interceptor;
 
+import com.auth0.jwt.JWT;
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemMenu;
 import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemMenuService;
+import com.example.eshop.admin.util.JwtUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,11 +37,12 @@ public class MenuPrivilegeInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) throws Exception {
-        TokenInfoDto tokenInfoDto = loginService.checkLogin();
-        if (tokenInfoDto.getSystemGroupId() == 1) {
+        String token = JwtUtil.getTokenFromHeader();
+        Integer groupId =  JwtUtil.getClaim(token,"systemGroupId").asInt();
+        if (groupId == 1) {
             return true;
         }
-        SystemGroup systemGroup = systemGroupService.findById(tokenInfoDto.getSystemGroupId());
+        SystemGroup systemGroup = systemGroupService.findById(groupId);
         List<String> strIdList = Arrays.asList(systemGroup.getMenus().split(","));
         List<Integer> intIdList = new ArrayList<>();
         for (String strId : strIdList) {

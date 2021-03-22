@@ -1,14 +1,17 @@
 package com.example.eshop.admin.controller;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemUser;
 import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
+import com.example.eshop.admin.exception.TokenInvalidException;
 import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
+import com.example.eshop.admin.util.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -124,8 +127,17 @@ public class SystemUserController {
             if (existUser != null) {
                 return ResponseDto.create(50101, "用户名已存在");
             }
-            TokenInfoDto tokenInfoDto = loginService.checkLogin();
-            user.setAddUser(tokenInfoDto.getSystemUsername());
+            String token = JwtUtil.getTokenFromHeader();
+            try {
+                loginService.checkLogin(token);
+            } catch (TokenInvalidException e) {
+                return ResponseDto.create(50102, "Token错误");
+            }
+            String addUser = JwtUtil.getClaim(token, "systemUsername").asString();
+            user.setAddUser(addUser);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("systemUserId", JwtUtil.getClaim(token,"systemUserId").asInt());
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = df.format(new Date());

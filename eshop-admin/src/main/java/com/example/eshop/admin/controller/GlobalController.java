@@ -2,11 +2,11 @@ package com.example.eshop.admin.controller;
 
 import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.dto.SystemMenuDto;
-import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
+import com.example.eshop.admin.exception.TokenInvalidException;
 import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemMultiStageMenuService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.eshop.admin.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @ControllerAdvice
 public class GlobalController {
@@ -46,19 +47,24 @@ public class GlobalController {
     }
 
     @ModelAttribute(name = "systemInfo")
-    public Map<String, Object> systemInfo() throws JsonProcessingException {
-        TokenInfoDto tokenInfoDto = loginService.checkLogin();
-        if (tokenInfoDto == null) {
+    public Map<String, Object> systemInfo() {
+        String token = JwtUtil.getTokenFromHeader();
+        if (token == null || token == "") {
+            return null;
+        }
+        try {
+            loginService.checkLogin(token);
+        } catch (TokenInvalidException e) {
             return null;
         }
         Map<String, Object> map = new HashMap<>();
-        List<SystemMenuDto> privMenu = systemMultiStageMenuService.getByGroupId(tokenInfoDto.getSystemGroupId());
+        List<SystemMenuDto> privMenu = systemMultiStageMenuService.getByGroupId(JwtUtil.getClaim(token,"systemGroupId").asInt());
         map.put("leftMenu", privMenu);
-        map.put("systemUserId", tokenInfoDto.getSystemUserId());
-        map.put("systemUsername", tokenInfoDto.getSystemUsername());
-        map.put("systemGroupId", tokenInfoDto.getSystemGroupId());
-        map.put("systemGroupName", tokenInfoDto.getSystemGroupName());
-        map.put("systemRealname", tokenInfoDto.getSystemRealname());
+        map.put("systemUserId", JwtUtil.getClaim(token,"systemUserId").asInt());
+        map.put("systemUsername", JwtUtil.getClaim(token,"systemUsername").asString());
+        map.put("systemGroupId", JwtUtil.getClaim(token,"systemGroupId").asInt());
+        map.put("systemGroupName", JwtUtil.getClaim(token,"systemGroupName").asString());
+        map.put("systemRealname", JwtUtil.getClaim(token,"systemRealname").asString());
         return map;
     }
 

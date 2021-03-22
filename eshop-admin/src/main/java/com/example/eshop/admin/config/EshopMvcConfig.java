@@ -29,11 +29,11 @@ public class EshopMvcConfig implements WebMvcConfigurer {
             public void addInterceptors(InterceptorRegistry registry) {
                 InterceptorRegistration loginRegistration = registry.addInterceptor(getLoginHandlerInterceptor());
                 loginRegistration.addPathPatterns("/**");
-                loginRegistration.excludePathPatterns("/admin/login", "/admin/dologin", "/admin/logout", "/admin/static/**");
+                loginRegistration.excludePathPatterns("/admin/login", "/admin/dologin", "/admin/me", "/admin/logout", "/admin/static/**");
 
                 InterceptorRegistration privRegistration = registry.addInterceptor(getMenuPrivilegeInterceptor());
                 privRegistration.addPathPatterns("/**");
-                privRegistration.excludePathPatterns("/admin", "/admin/login", "/admin/dologin", "/admin/logout", "/admin/static/**");
+                privRegistration.excludePathPatterns("/admin", "/admin/login", "/admin/dologin", "/admin/me", "/admin/logout", "/admin/static/**");
             }
         };
     }

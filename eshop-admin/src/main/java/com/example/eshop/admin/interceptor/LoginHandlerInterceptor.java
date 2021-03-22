@@ -1,9 +1,14 @@
 package com.example.eshop.admin.interceptor;
 
+import com.example.eshop.admin.dto.ResponseDto;
 import com.example.eshop.admin.dto.TokenInfoDto;
+import com.example.eshop.admin.exception.TokenInvalidException;
 import com.example.eshop.admin.service.LoginService;
+import com.example.eshop.admin.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,12 +26,13 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) throws Exception {
-        TokenInfoDto tokenInfoDto = loginService.checkLogin();
-        if (tokenInfoDto == null) {
+        String token = JwtUtil.getTokenFromHeader();
+        try {
+            loginService.checkLogin(token);
+            return true;
+        } catch (TokenInvalidException e) {
             response.sendRedirect("/admin/login");
             return false;
-        }else {
-            return true;
         }
     }
 
