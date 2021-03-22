@@ -136,9 +136,6 @@ public class SystemUserController {
             String addUser = JwtUtil.getClaim(token, "systemUsername").asString();
             user.setAddUser(addUser);
 
-            Map<String, Object> map = new HashMap<>();
-            map.put("systemUserId", JwtUtil.getClaim(token,"systemUserId").asInt());
-
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = df.format(new Date());
             user.setCreateTime(time);
