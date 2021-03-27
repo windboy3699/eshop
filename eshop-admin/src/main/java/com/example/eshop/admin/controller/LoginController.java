@@ -28,8 +28,8 @@ public class LoginController {
 
     @ResponseBody
     @RequestMapping(value = "/dologin", method = RequestMethod.POST)
-    public ResponseDto<Object> doLogin(@RequestParam String username, @RequestParam String password) {
-        String loginResult = loginService.doLogin(username, password);
+    public ResponseDto<Object> doLogin(@RequestBody Map<String, String> map) {
+        String loginResult = loginService.doLogin(map.get("username"), map.get("password"));
         if (loginResult == null) {
             return ResponseDto.create(50101, "用户名或密码错误");
         }
