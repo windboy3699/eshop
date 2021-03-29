@@ -9,11 +9,13 @@ import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.util.JwtUtil;
 import com.example.eshop.admin.vo.AccountVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
     private static final String SECRET = "PC3JNLHRBYQM76VX";
 
@@ -38,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
         accountVo.setGroupId(systemUser.getGroupId());
         accountVo.setGroupName(systemGroup.getName());
         accountVo.setRealname(systemUser.getRealname());
+        log.info("username:" + systemUser.getUsername());
         return JwtUtil.createToken(systemUser.getId().toString(), accountVo, SECRET, EXPIRES_MINUTES);
     }
 
