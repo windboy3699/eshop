@@ -24,11 +24,11 @@ public class JwtUtil {
         return JWT.create().withAudience(audience)
                 .withIssuedAt(new Date())
                 .withExpiresAt(expiresDate)
-                .withClaim("systemUserId", accountVo.getSystemUserId())
-                .withClaim("systemUsername", accountVo.getSystemUsername())
-                .withClaim("systemGroupId", accountVo.getSystemGroupId())
-                .withClaim("systemGroupName", accountVo.getSystemGroupName())
-                .withClaim("systemRealname", accountVo.getSystemRealname())
+                .withClaim("userId", accountVo.getUserId())
+                .withClaim("username", accountVo.getUsername())
+                .withClaim("groupId", accountVo.getGroupId())
+                .withClaim("groupName", accountVo.getGroupName())
+                .withClaim("realname", accountVo.getRealname())
                 .sign(Algorithm.HMAC256(secret));
     }
 

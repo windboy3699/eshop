@@ -1,10 +1,7 @@
 package com.example.eshop.admin.interceptor;
 
-import com.auth0.jwt.JWT;
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemMenu;
-import com.example.eshop.admin.dto.TokenInfoDto;
-import com.example.eshop.admin.service.LoginService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemMenuService;
 import com.example.eshop.admin.util.JwtUtil;
@@ -22,9 +19,6 @@ import java.util.List;
 
 @Component
 public class MenuPrivilegeInterceptor implements HandlerInterceptor {
-    @Autowired
-    private LoginService loginService;
-
     @Autowired
     private SystemGroupService systemGroupService;
 

@@ -4,7 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemUser;
 import com.example.eshop.admin.exception.TokenInvalidException;
-import com.example.eshop.admin.service.LoginService;
+import com.example.eshop.admin.service.AuthService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.util.JwtUtil;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 @Service
-public class LoginServiceImpl implements LoginService {
+public class AuthServiceImpl implements AuthService {
     private static final String SECRET = "PC3JNLHRBYQM76VX";
 
     private static final Integer EXPIRES_MINUTES = 60;
@@ -25,7 +25,7 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private SystemGroupService systemGroupService;
 
-    public String doLogin(String username, String password) {
+    public String login(String username, String password) {
         String md5String = DigestUtils.md5DigestAsHex(password.getBytes());
         SystemUser systemUser = systemUserService.findByUsernameAndPassword(username, md5String);
         if (systemUser == null) {
@@ -33,11 +33,11 @@ public class LoginServiceImpl implements LoginService {
         }
         SystemGroup systemGroup = systemGroupService.findById(systemUser.getGroupId());
         AccountVo accountVo = new AccountVo();
-        accountVo.setSystemUserId(systemUser.getId());
-        accountVo.setSystemUsername(systemUser.getUsername());
-        accountVo.setSystemGroupId(systemUser.getGroupId());
-        accountVo.setSystemGroupName(systemGroup.getName());
-        accountVo.setSystemRealname(systemUser.getRealname());
+        accountVo.setUserId(systemUser.getId());
+        accountVo.setUsername(systemUser.getUsername());
+        accountVo.setGroupId(systemUser.getGroupId());
+        accountVo.setGroupName(systemGroup.getName());
+        accountVo.setRealname(systemUser.getRealname());
         return JwtUtil.createToken(systemUser.getId().toString(), accountVo, SECRET, EXPIRES_MINUTES);
     }
 

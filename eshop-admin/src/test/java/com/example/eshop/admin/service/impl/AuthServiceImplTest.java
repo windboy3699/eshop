@@ -7,15 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class LoginServiceImplTest {
-    @Autowired LoginServiceImpl loginService;
+class AuthServiceImplTest {
+    @Autowired AuthServiceImpl authService;
 
     @Test
     void doLogin() {
-        Assert.assertEquals(Boolean.valueOf(true),loginService.doLogin("sally", "123456"));
+        Assert.assertEquals(Boolean.valueOf(true),authService.login("sally", "123456"));
     }
 }

@@ -1,13 +1,11 @@
 package com.example.eshop.admin.controller;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.eshop.admin.domain.SystemGroup;
 import com.example.eshop.admin.domain.SystemUser;
 import com.example.eshop.admin.dto.ResponseDto;
-import com.example.eshop.admin.dto.TokenInfoDto;
 import com.example.eshop.admin.enums.ErrorCodeEnum;
 import com.example.eshop.admin.exception.TokenInvalidException;
-import com.example.eshop.admin.service.LoginService;
+import com.example.eshop.admin.service.AuthService;
 import com.example.eshop.admin.service.SystemGroupService;
 import com.example.eshop.admin.service.SystemUserService;
 import com.example.eshop.admin.service.impl.PaginatorServiceImpl;
@@ -41,7 +39,7 @@ public class SystemUserController {
     private SystemGroupService systemGroupService;
 
     @Autowired
-    private LoginService loginService;
+    private AuthService authService;
 
     private List<Map<String, String>> getBaseBreadCrumbs() {
         List<Map<String, String>> breadCrumbs = new ArrayList<>();
@@ -129,7 +127,7 @@ public class SystemUserController {
             }
             String token = JwtUtil.getTokenFromHeader();
             try {
-                loginService.checkLogin(token);
+                authService.checkLogin(token);
             } catch (TokenInvalidException e) {
                 return ResponseDto.create(50102, "Token错误");
             }
