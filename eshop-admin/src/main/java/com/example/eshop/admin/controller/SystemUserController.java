@@ -131,7 +131,7 @@ public class SystemUserController {
             } catch (TokenInvalidException e) {
                 return ResponseDto.create(50102, "Token错误");
             }
-            String addUser = JwtUtil.getClaim(token, "systemUsername").asString();
+            String addUser = JwtUtil.getClaim(token, "username").asString();
             user.setAddUser(addUser);
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -32,7 +32,7 @@ public class MenuPrivilegeInterceptor implements HandlerInterceptor {
             Object handler
     ) throws Exception {
         String token = JwtUtil.getTokenFromHeader();
-        Integer groupId =  JwtUtil.getClaim(token,"systemGroupId").asInt();
+        Integer groupId =  JwtUtil.getClaim(token,"groupId").asInt();
         if (groupId == 1) {
             return true;
         }

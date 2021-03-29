@@ -58,7 +58,7 @@ public class GlobalController {
             return null;
         }
         Map<String, Object> map = new HashMap<>();
-        List<SystemMenuDto> privMenu = systemMultiStageMenuService.getByGroupId(JwtUtil.getClaim(token,"systemGroupId").asInt());
+        List<SystemMenuDto> privMenu = systemMultiStageMenuService.getByGroupId(JwtUtil.getClaim(token,"groupId").asInt());
         map.put("leftMenu", privMenu);
         map.put("userId", JwtUtil.getClaim(token,"userId").asInt());
         map.put("username", JwtUtil.getClaim(token,"username").asString());
