@@ -43,9 +43,6 @@ public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuServ
             systemMenuDto.setTopid(item.getTopid());
             systemMenuDto.setLink(item.getLink());
             systemMenuDtoList.add(systemMenuDto);
-            if (group != null && !idList.isEmpty() && idList.contains(item.getId())) {
-                systemMenuDto.setActive(true);
-            }
         }
         List<SystemMenuDto> rootMenu = new ArrayList<>();
         for (SystemMenuDto item : systemMenuDtoList) {
@@ -107,7 +104,6 @@ public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuServ
                 systemMenuDto.setTopid(item.getTopid());
                 systemMenuDto.setLink(item.getLink());
                 if (StringUtils.isNotBlank(item.getPath()) && uri.indexOf(item.getPath()) != -1) {
-                    systemMenuDto.setActive(true);
                     activeIdList.add(item.getId());
                     SystemMenu level2Menu = mappedAllMenu.get(item.getTopid());
                     if (level2Menu != null) {
@@ -119,11 +115,6 @@ public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuServ
                     }
                 }
                 systemMenuDtoList.add(systemMenuDto);
-            }
-        }
-        for (SystemMenuDto item : systemMenuDtoList) {
-            if (activeIdList.contains(item.getId())) {
-                item.setActive(true);
             }
         }
         List<SystemMenuDto> rootMenu = new ArrayList<>();

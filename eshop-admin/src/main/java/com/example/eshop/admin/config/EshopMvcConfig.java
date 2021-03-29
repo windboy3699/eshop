@@ -1,6 +1,6 @@
 package com.example.eshop.admin.config;
 
-import com.example.eshop.admin.interceptor.LoginHandlerInterceptor;
+import com.example.eshop.admin.interceptor.AuthInterceptor;
 import com.example.eshop.admin.interceptor.MenuPrivilegeInterceptor;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,8 @@ import javax.servlet.MultipartConfigElement;
 @Configuration
 public class EshopMvcConfig implements WebMvcConfigurer {
     @Bean
-    LoginHandlerInterceptor getLoginHandlerInterceptor() {
-        return new LoginHandlerInterceptor();
+    AuthInterceptor getAuthInterceptor() {
+        return new AuthInterceptor();
     }
 
     @Bean
@@ -27,7 +27,7 @@ public class EshopMvcConfig implements WebMvcConfigurer {
         return new WebMvcConfigurer() {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                InterceptorRegistration loginRegistration = registry.addInterceptor(getLoginHandlerInterceptor());
+                InterceptorRegistration loginRegistration = registry.addInterceptor(getAuthInterceptor());
                 loginRegistration.addPathPatterns("/**");
                 loginRegistration.excludePathPatterns("/admin/login", "/admin/checkLogin", "/admin/logout", "/admin/static/**");
 

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class LoginHandlerInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     private AuthService authService;
 
@@ -27,7 +27,6 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
             authService.checkLogin(token);
             return true;
         } catch (TokenInvalidException e) {
-            response.sendRedirect("/admin/login");
             return false;
         }
     }
