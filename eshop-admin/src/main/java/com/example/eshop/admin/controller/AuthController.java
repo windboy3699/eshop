@@ -53,7 +53,7 @@ public class AuthController {
         map.put("realname", JwtUtil.getClaim(token,"realname").asString());
 
         List<SystemMenuDto> menus = systemMultiStageMenuService.getByGroupId(JwtUtil.getClaim(token,"groupId").asInt());
-        map.put("menus", menus);
+        map.put("sideMenus", menus);
 
         return ResponseDto.create(0, "ok", map);
     }

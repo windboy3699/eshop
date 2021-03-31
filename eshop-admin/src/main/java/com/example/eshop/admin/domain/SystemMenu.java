@@ -18,6 +18,7 @@ public class SystemMenu {
     private Integer topid;
     private String path;
     private String link;
+    private String icon;
     private Integer visible;
     private Integer sort;
 
@@ -44,6 +45,10 @@ public class SystemMenu {
     public String getLink() { return link; }
 
     public void setLink(String link) { this.link = link; }
+
+    public String getIcon() { return icon; }
+
+    public void setIcon(String icon) { this.icon = icon; }
 
     public Integer getVisible() { return visible; }
 

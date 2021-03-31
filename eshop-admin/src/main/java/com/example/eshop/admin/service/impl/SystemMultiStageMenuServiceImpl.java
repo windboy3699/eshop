@@ -42,6 +42,7 @@ public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuServ
             systemMenuDto.setName(item.getName());
             systemMenuDto.setTopid(item.getTopid());
             systemMenuDto.setLink(item.getLink());
+            systemMenuDto.setIcon(item.getIcon());
             systemMenuDtoList.add(systemMenuDto);
         }
         List<SystemMenuDto> rootMenu = new ArrayList<>();
@@ -103,6 +104,7 @@ public class SystemMultiStageMenuServiceImpl implements SystemMultiStageMenuServ
                 systemMenuDto.setName(item.getName());
                 systemMenuDto.setTopid(item.getTopid());
                 systemMenuDto.setLink(item.getLink());
+                systemMenuDto.setIcon(item.getIcon());
                 if (StringUtils.isNotBlank(item.getPath()) && uri.indexOf(item.getPath()) != -1) {
                     activeIdList.add(item.getId());
                     SystemMenu level2Menu = mappedAllMenu.get(item.getTopid());
